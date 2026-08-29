@@ -31,7 +31,7 @@ const RESEND_SECONDS = 30;
 
 export const LeadFormDialog = ({ open, onOpenChange }) => {
   const navigate = useNavigate();
-  const [step, setStep] = useState("details");
+  const [step, setStep] = useState("form");
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [otp, setOtp] = useState("");
@@ -49,7 +49,7 @@ export const LeadFormDialog = ({ open, onOpenChange }) => {
     }
     if (!open) {
       startedRef.current = false;
-      setStep("details");
+      setStep("form");
       setError("");
       setOtp("");
       setDevCode("");
@@ -68,6 +68,7 @@ export const LeadFormDialog = ({ open, onOpenChange }) => {
     setError("");
     if (name.trim().length < 2) return setError("Please enter your full name");
     if (!phoneValid) return setError("Enter a valid 10-digit mobile number");
+    if (!allAnswered) return setError("Please answer all 4 questions to get the brochure");
     setLoading(true);
     try {
       const { data } = await api.post("/otp/send", { phone });
@@ -89,7 +90,7 @@ export const LeadFormDialog = ({ open, onOpenChange }) => {
     try {
       await api.post("/otp/verify", { phone, code: otp });
       track("otp_verified");
-      setStep("questions");
+      await submitLead();
     } catch (e) {
       track("otp_failed");
       setError(e.response?.data?.detail || "Verification failed");
@@ -101,7 +102,7 @@ export const LeadFormDialog = ({ open, onOpenChange }) => {
   const allAnswered = QUESTIONS.every((q) => answers[q.key]);
 
   const submitLead = async () => {
-    if (!allAnswered || loading) return;
+    if (!allAnswered) return;
     setLoading(true);
     setError("");
     try {
@@ -136,18 +137,16 @@ export const LeadFormDialog = ({ open, onOpenChange }) => {
       >
         <DialogHeader>
           <DialogTitle className="font-display text-2xl text-maroon">
-            {step === "details" && "Download Brochure"}
+            {step === "form" && "Download Brochure"}
             {step === "otp" && "Verify Your Number"}
-            {step === "questions" && "Almost Done"}
           </DialogTitle>
           <p className="text-sm text-ink/60">
-            {step === "details" && "Get the complete Manthan Legacy brochure instantly."}
+            {step === "form" && "Answer 4 quick questions, verify your number, and get the brochure instantly."}
             {step === "otp" && `OTP sent to +91 ${phone}`}
-            {step === "questions" && "Help us personalise your brochure follow-up."}
           </p>
         </DialogHeader>
 
-        {step === "details" && (
+        {step === "form" && (
           <div className="mt-2 space-y-4">
             <div>
               <label htmlFor="lead-name" className="mb-1 block text-xs font-semibold uppercase tracking-wider text-maroon">
@@ -187,6 +186,35 @@ export const LeadFormDialog = ({ open, onOpenChange }) => {
                 <ShieldCheck className="h-3 w-3 text-brass-dark" /> OTP verification required
               </p>
             </div>
+            <div className="space-y-5 border-t border-maroon/10 pt-5">
+              {QUESTIONS.map((q, qi) => (
+                <div key={q.key} data-testid={`question-${qi + 1}`}>
+                  <p className="mb-2 text-sm font-semibold text-ink">
+                    <span className="mr-1.5 font-display italic text-brass-dark">{qi + 1}.</span>
+                    {q.label}
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {q.options.map((opt) => {
+                      const active = answers[q.key] === opt;
+                      return (
+                        <button
+                          key={opt}
+                          data-testid={`q${qi + 1}-option-${opt.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`}
+                          onClick={() => setAnswers((a) => ({ ...a, [q.key]: opt }))}
+                          className={`border px-3.5 py-2 text-sm transition-colors ${
+                            active
+                              ? "border-maroon bg-maroon text-ivory"
+                              : "border-maroon/25 bg-ivory text-ink hover:border-maroon"
+                          }`}
+                        >
+                          {opt}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              ))}
+            </div>
             {error && <p data-testid="lead-form-error" className="text-sm font-medium text-destructive">{error}</p>}
             <button
               data-testid="send-otp-btn"
@@ -224,12 +252,12 @@ export const LeadFormDialog = ({ open, onOpenChange }) => {
               className="flex w-full items-center justify-center gap-2 bg-maroon py-3.5 text-sm font-bold uppercase tracking-[0.18em] text-ivory transition-colors hover:bg-maroon-deep disabled:opacity-60"
             >
               {loading && <Loader2 className="h-4 w-4 animate-spin" />}
-              Verify OTP
+              Verify & Get Brochure
             </button>
             <div className="flex items-center justify-between text-sm">
               <button
                 data-testid="otp-back-btn"
-                onClick={() => { setStep("details"); setError(""); }}
+                onClick={() => { setStep("form"); setError(""); }}
                 className="flex items-center gap-1 text-ink/60 transition-colors hover:text-maroon"
               >
                 <ArrowLeft className="h-3.5 w-3.5" /> Edit details
@@ -246,47 +274,6 @@ export const LeadFormDialog = ({ open, onOpenChange }) => {
           </div>
         )}
 
-        {step === "questions" && (
-          <div className="mt-2 space-y-5">
-            {QUESTIONS.map((q, qi) => (
-              <div key={q.key} data-testid={`question-${qi + 1}`}>
-                <p className="mb-2 text-sm font-semibold text-ink">
-                  <span className="mr-1.5 font-display italic text-brass-dark">{qi + 1}.</span>
-                  {q.label}
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  {q.options.map((opt) => {
-                    const active = answers[q.key] === opt;
-                    return (
-                      <button
-                        key={opt}
-                        data-testid={`q${qi + 1}-option-${opt.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`}
-                        onClick={() => setAnswers((a) => ({ ...a, [q.key]: opt }))}
-                        className={`border px-3.5 py-2 text-sm transition-colors ${
-                          active
-                            ? "border-maroon bg-maroon text-ivory"
-                            : "border-maroon/25 bg-ivory text-ink hover:border-maroon"
-                        }`}
-                      >
-                        {opt}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-            ))}
-            {error && <p data-testid="lead-submit-error" className="text-sm font-medium text-destructive">{error}</p>}
-            <button
-              data-testid="submit-lead-btn"
-              onClick={submitLead}
-              disabled={!allAnswered || loading}
-              className="flex w-full items-center justify-center gap-2 bg-brass py-3.5 text-sm font-bold uppercase tracking-[0.18em] text-maroon-deep transition-colors hover:bg-brass-dark disabled:cursor-not-allowed disabled:opacity-50"
-            >
-              {loading && <Loader2 className="h-4 w-4 animate-spin" />}
-              Get My Brochure
-            </button>
-          </div>
-        )}
       </DialogContent>
     </Dialog>
   );
