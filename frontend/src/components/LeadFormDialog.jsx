@@ -215,16 +215,18 @@ export const LeadFormDialog = ({ open, onOpenChange }) => {
                 </div>
               ))}
             </div>
-            {error && <p data-testid="lead-form-error" className="text-sm font-medium text-destructive">{error}</p>}
-            <button
-              data-testid="send-otp-btn"
-              onClick={sendOtp}
-              disabled={loading}
-              className="flex w-full items-center justify-center gap-2 bg-maroon py-3.5 text-sm font-bold uppercase tracking-[0.18em] text-ivory transition-colors hover:bg-maroon-deep disabled:opacity-60"
-            >
-              {loading && <Loader2 className="h-4 w-4 animate-spin" />}
-              Send OTP
-            </button>
+            <div data-testid="send-otp-sticky-bar" className="sticky bottom-0 -mx-6 border-t border-maroon/10 bg-ivory px-6 pb-1 pt-3 sm:-mx-8 sm:px-8">
+              {error && <p data-testid="lead-form-error" className="mb-2 text-sm font-medium text-destructive">{error}</p>}
+              <button
+                data-testid="send-otp-btn"
+                onClick={sendOtp}
+                disabled={loading}
+                className="flex w-full items-center justify-center gap-2 bg-maroon py-3.5 text-sm font-bold uppercase tracking-[0.18em] text-ivory transition-colors hover:bg-maroon-deep disabled:opacity-60"
+              >
+                {loading && <Loader2 className="h-4 w-4 animate-spin" />}
+                Send OTP
+              </button>
+            </div>
           </div>
         )}
 
