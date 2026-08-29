@@ -1,0 +1,108 @@
+{
+  "theme": "light",
+  "typography": {
+    "heading_font": "Playfair Display",
+    "body_font": "Manrope",
+    "rules": [
+      "Use Playfair Display for all major headings to achieve a distinctive, premium Indian real estate editorial look. Install via @fontsource/playfair-display.",
+      "Use Manrope for body text, form inputs, and small metrics for clean readability. Install via @fontsource/manrope.",
+      "Employ tight tracking (tracking-tight) on large serif headings.",
+      "Numbered manifesto chapters should use massive, low-opacity serif numerals (e.g., text-[15vw] text-forest/5) overlaid in the background."
+    ]
+  },
+  "colors": {
+    "background": {
+      "primary": "#F7F5F0",
+      "secondary": "#EAE7DF",
+      "description": "Warm ivory / stone paper texture for an earthy, premium feel."
+    },
+    "text": {
+      "primary": "#1A1A1A",
+      "secondary": "#4A4A4A",
+      "description": "Rich charcoal ink for maximum readability but softer than pure black."
+    },
+    "accent": {
+      "primary": "#0B2B26",
+      "secondary": "#C5A059",
+      "description": "Deep forest/emerald as the grounding brand color, Brass/Gold for CTAs and highlights."
+    },
+    "forbidden": [
+      "#7351B7",
+      "#1B93A4",
+      "#000000",
+      "#FFFFFF (use #FCFBF9 instead where absolute white is needed)"
+    ]
+  },
+  "visual_enhancers": {
+    "textures": "Apply a subtle SVG noise filter or background image with very low opacity to simulate warm stone or paper texture.",
+    "borders": "Use fine 1px borders in #C5A059 (Brass/Gold) or #0B2B26/20 (Forest with low opacity) to frame content.",
+    "shapes": "Use clipped frames (sharp corners combined with smooth rounded corners, e.g., rounded-tr-3xl rounded-bl-3xl) to display images like editorial spotlight cuts."
+  },
+  "motion": {
+    "philosophy": "Tasteful and cheap. Premium purposeful motion via Framer Motion but constrained for fast load and mobile-first performance.",
+    "hero_reveal": "Masked line-by-line reveal on load. Wrap text lines in overflow-hidden, animate y from 100% to 0.",
+    "scroll_effects": "Use lenis for smooth scroll. Use simple opacity + translateY (y: 20 -> y: 0) for section reveals.",
+    "reduced_motion": "Ensure all framer-motion animations respect prefers-reduced-motion."
+  },
+  "layouts": {
+    "hero": "Large kinetic hero, split layout or full-screen with overlaid text. Image should have a slight vignette or clipped frame. Must include Project Name (Manthan Legacy), Location (Vatva, Ahmedabad), Starting Price ('Price on Request'), and DOWNLOAD BROCHURE CTA.",
+    "quick_facts": "A horizontal strip or bento-grid detailing 7 towers, 2 & 3 BHK homes, 133 retail shops, 1 Lac+ sq.ft open spaces, 70% open area, RERA: MAA15874. Use clean dividers.",
+    "amenities": "Editorial bento grid or list with spotlight imagery. Numbered sections. Features: clubhouse, gym, temple, jogging track, 24x7 security, children's play area.",
+    "sticky_cta": "On mobile (below md breakpoint), a fixed bottom bar with solid Deep Forest background and Brass text/icon for one-tap call/WhatsApp."
+  },
+  "components": {
+    "lead_form_modal": "Shadcn Dialog. Minimalist ivory background. Fields: Name, Phone (with OTP verify UI implied), 4 qualifying questions. Submit button styled as solid deep forest.",
+    "thank_you_state": "After form submission, replace dialog content with Thank You message and two massive CTAs: CALL NOW (tel:+917001660016) and CHAT ON WHATSAPP (wa.me/917001660016).",
+    "marquee": "One slow editorial marquee using react-fast-marquee. Text: 'MANTHAN LEGACY — A PREMIUM RESIDENTIAL PROJECT IN VATVA, AHMEDABAD'."
+  },
+  "accessibility": {
+    "contrast": "Ensure brass text on ivory meets 4.5:1, use forest green for text if brass is too light.",
+    "testing": "All interactive elements (buttons, inputs) must have data-testid attributes (e.g., data-testid='download-brochure-btn')."
+  },
+  "image_urls": [
+    {
+      "category": "hero",
+      "url": "https://images.unsplash.com/photo-1722421492323-eaf9c401befe?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NzV8MHwxfHNlYXJjaHwzfHxwcmVtaXVtJTIwcmVzaWRlbnRpYWwlMjBidWlsZGluZyUyMGV4dGVyaW9yJTIwZmFjYWRlfGVufDB8fHx8MTc4NzI5MzY2M3ww&ixlib=rb-4.1.0&q=85",
+      "description": "Modern premium residential building exterior to serve as hero background."
+    },
+    {
+      "category": "amenities_gym",
+      "url": "https://images.unsplash.com/photo-1758957646695-ec8bce3df462?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzMzJ8MHwxfHNlYXJjaHwxfHxsdXh1cnklMjBjbHViaG91c2UlMjBneW0lMjBpbnRlcmlvcnxlbnwwfHx8fDE3ODQ4OTgzODN8MA&ixlib=rb-4.1.0&q=85",
+      "description": "Luxury clubhouse and gym interior."
+    },
+    {
+      "category": "amenities_park",
+      "url": "https://images.pexels.com/photos/19975457/pexels-photo-19975457.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+      "description": "Landscaped park with fountain, representing the 1 Lac+ sq.ft open spaces."
+    },
+    {
+      "category": "amenities_temple",
+      "url": "https://images.unsplash.com/photo-1554554497-0095c34db3ec?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Njl8MHwxfHNlYXJjaHwyfHxpbmRpYW4lMjB0cmFkaXRpb25hbCUyMG1vZGVybiUyMHRlbXBsZSUyMGFyY2hpdGVjdHVyZXxlbnwwfHx8fDE3ODMwNzM5MjN8MA&ixlib=rb-4.1.0&q=85",
+      "description": "Modern Indian temple architecture."
+    }
+  ],
+  "3d_libraries": {
+    "recommendation": "None. The requirement prioritizes fast load and minimal animations. Use Framer Motion for simple scroll reveals and Lenis for smooth scroll, avoiding heavy WebGL/Canvas to ensure high mobile conversion."
+  },
+  "instructions_to_main_agent": [
+    "Install required dependencies: framer-motion, lenis (or @studio-freight/lenis), react-fast-marquee, lucide-react, @fontsource/playfair-display, @fontsource/manrope.",
+    "Configure tailwind.config.js to include the custom colors (ivory, forest, brass) and fonts.",
+    "Do not use generic centered layouts. Opt for asymmetrical, bento grids, and overlapping elements.",
+    "For the hero section, use `overflow-hidden` around text lines and animate them up for the line-by-line reveal.",
+    "Create a fixed sticky footer for mobile containing 'Call Now' and 'WhatsApp' buttons to drive conversions.",
+    "Use Shadcn UI for the Lead Form Dialog, customizing it heavily with the ivory and forest green palette.",
+    "Ensure 'DOWNLOAD BROCHURE' CTA triggers the lead form modal.",
+    "Implement the Thank You view inside the modal (or replacing the form content) after form submission with massive CTAs."
+  ],
+  "UNIVERSAL_GUIDELINES_FOR_MAIN_AGENT": [
+    "You tend to converge toward generic, 'on distribution' outputs. Make creative, distinctive frontends that surprise and delight.",
+    "Do not make generic centered layouts, simplistic gradients, and uniform styling.",
+    "Create depth through layered design elements with z-index hierarchy.",
+    "You MUST NOT apply universal transition (e.g., transition: all). Always add transitions for specific interactive elements.",
+    "You MUST NOT center align the app container in global CSS.",
+    "Always use modern button styles, relevant to the app style (e.g., sharp corners or slightly rounded).",
+    "NEVER use AI assistant Emoji characters.",
+    "Use 2-3x more spacing than feels comfortable.",
+    "Use the provided image URLs exclusively. Never use placeholder text for images."
+  ]
+}
