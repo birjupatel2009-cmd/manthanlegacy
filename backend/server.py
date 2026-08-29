@@ -109,6 +109,10 @@ async def push_to_daebuild(lead: "Lead") -> bool:
             {"column_id": "FULL_NAME", "string_value": lead.name},
             {"column_id": "PHONE_NUMBER", "string_value": f"+91{lead.phone}"},
             {"column_id": "EMAIL", "string_value": ""},
+            {"column_name": "Are you interested in Vatva?", "string_value": lead.interested_vatva},
+            {"column_name": "What are you looking for?", "string_value": lead.unit_type},
+            {"column_name": "What is your budget?", "string_value": lead.budget},
+            {"column_name": "When do you plan to buy?", "string_value": lead.timeline},
         ],
         "remarks": remarks,
     }
