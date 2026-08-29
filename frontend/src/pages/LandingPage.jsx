@@ -263,15 +263,25 @@ export default function LandingPage() {
         <div className="mx-auto max-w-6xl px-5 py-16 md:px-10 md:py-24">
           <FadeUp>
             <p className="mb-3 flex items-center gap-3 text-xs font-bold uppercase tracking-[0.3em] text-brass-light">
-              <span className="inline-block h-px w-10 bg-brass" /> Chapter 04
+              <span className="inline-block h-px w-10 bg-brass" /> Special Payment Plan
             </p>
             <h2 className="font-display text-4xl tracking-tight sm:text-5xl">
-              Flexible payment plans, <span className="italic text-brass-light">crafted around you.</span>
+              Pay 10% or ₹4 Lakh now. <span className="italic text-brass-light">Rest on possession.</span>
             </h2>
           </FadeUp>
-          <FadeUp delay={0.1} className="mt-6 max-w-xl">
-            <p className="text-sm leading-relaxed text-ivory/75 md:text-base">
-              Construction-linked, easy payment schedules tailored on request. Download the brochure for the complete price list, floor plans and payment structure.
+          <FadeUp delay={0.1} className="mt-8 max-w-xl">
+            <div data-testid="payment-split" className="grid grid-cols-2 divide-x divide-ivory/15 border border-ivory/15">
+              <div className="px-5 py-6">
+                <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-brass-light">Book Now</p>
+                <p className="mt-2 font-display text-2xl italic text-ivory md:text-3xl">10% or ₹4 Lakh*</p>
+              </div>
+              <div className="px-5 py-6">
+                <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-brass-light">On Possession</p>
+                <p className="mt-2 font-display text-2xl italic text-ivory md:text-3xl">Balance 90%</p>
+              </div>
+            </div>
+            <p className="mt-5 text-sm leading-relaxed text-ivory/75 md:text-base">
+              Reserve your Manthan Legacy home with just 10% or ₹4 Lakh* today — nothing more to pay until possession. Download the brochure for the complete price list, floor plans and payment details.
             </p>
           </FadeUp>
           <FadeUp delay={0.18} className="mt-9 flex flex-col gap-4 sm:flex-row sm:items-center">
@@ -307,6 +317,7 @@ export default function LandingPage() {
             MANTHAN <span className="italic text-brass-dark">Legacy</span>
           </p>
           <p className="mt-3 max-w-2xl text-xs leading-relaxed text-ink/50">
+            *Starting from prices. Payment plan subject to terms and availability.
             Manthan Legacy by Manthan Group (Karm Infra) · Vatva, Ahmedabad · RERA No. MAA15874 · www.manthangroup.in.
             Images are artistic interpretations. This page is for information only and does not constitute an offer.
           </p>

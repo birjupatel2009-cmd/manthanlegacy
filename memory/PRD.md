@@ -28,7 +28,11 @@ Build a fast-loading, mobile-first, responsive real estate project landing page 
 ## Backlog
 - P0: Real SMS OTP (Twilio/MSG91 — needs user API keys).
 - P1: Lead email notification via managed Resend; admin dashboard for leads/events (GET /api/leads exists, no auth).
-- P2: UTM/meta capture on leads; image_srcset for faster mobile LCP; actual price/payment plan content when client provides.
+- P2: UTM/meta capture on leads; image_srcset for faster mobile LCP.
+
+## Updates (2026-08-29, later)
+- Special payment plan section: "Pay 10% or ₹4 Lakh now. Rest on possession." with Book Now / On Possession split, footer T&C footnote, *starting from pricing (₹37L* 2BHK / ₹47L* 3BHK) in hero and unit cards, header branding + call pill button.
+- Requested pending: WhatsApp OTP (needs Meta WABA credentials: WHATSAPP_PHONE_NUMBER_ID, access token, approved auth template), DaeBuild CRM webhook (needs webhook URL + API key from DaeBuild team).
 
 ## Next Tasks
 1. Swap mocked OTP for real SMS provider (needs credentials).
