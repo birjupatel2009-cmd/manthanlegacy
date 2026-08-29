@@ -3,6 +3,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import {
   ArrowDown, Building2, Trees, ShieldCheck, TrainFront, Hospital,
   GraduationCap, ShoppingBasket, Route, Phone, Download, MapPin,
+  Facebook, Instagram,
 } from "lucide-react";
 import { RevealLine, FadeUp } from "../components/reveal";
 import { Marquee } from "../components/Marquee";
@@ -136,8 +137,9 @@ export default function LandingPage() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1.4 }}
-          className="absolute bottom-6 right-6 z-10 hidden text-ivory/60 md:block"
+          className="absolute inset-x-0 bottom-24 z-10 flex flex-col items-center gap-1.5 text-ivory/70 md:inset-x-auto md:bottom-6 md:right-6"
         >
+          <span className="text-[10px] font-bold uppercase tracking-[0.3em]">Scroll</span>
           <ArrowDown className="h-5 w-5 animate-bounce" />
         </motion.div>
       </section>
@@ -320,12 +322,59 @@ export default function LandingPage() {
         </div>
       </Chapter>
 
+      {/* Completed projects */}
+      <section data-testid="completed-projects" className="border-t border-maroon/10 bg-parchment/40">
+        <div className="mx-auto max-w-6xl px-5 py-14 md:px-10">
+          <FadeUp>
+            <p className="mb-3 flex items-center gap-3 text-xs font-bold uppercase tracking-[0.3em] text-brass-dark">
+              <span className="inline-block h-px w-10 bg-brass" /> Proven Legacy
+            </p>
+            <h2 className="font-display text-3xl tracking-tight text-maroon sm:text-4xl">Completed Projects</h2>
+          </FadeUp>
+          <FadeUp delay={0.1}>
+            <ul className="mt-7 flex flex-wrap gap-2.5">
+              {["Manthan Grees", "Manthan 222", "Bijal Homes", "Manthan-25 Bungalows", "Manthan-25 Flats", "& more"].map((p) => (
+                <li
+                  key={p}
+                  data-testid={`completed-project-${p.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`}
+                  className="border border-maroon/20 bg-ivory px-4 py-2 text-sm font-medium text-ink/75"
+                >
+                  {p}
+                </li>
+              ))}
+            </ul>
+          </FadeUp>
+        </div>
+      </section>
+
       {/* Footer */}
       <footer className="border-t border-maroon/10 bg-ivory px-5 py-10 pb-28 md:px-10 md:pb-10">
         <div className="mx-auto max-w-6xl">
           <p className="font-display text-lg text-maroon">
             MANTHAN <span className="italic text-brass-dark">Legacy</span>
           </p>
+          <div className="mt-4 flex items-center gap-3">
+            <a
+              data-testid="footer-facebook-link"
+              href="https://www.facebook.com/manthangroupin"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Manthan Group on Facebook"
+              className="flex h-9 w-9 items-center justify-center rounded-full border border-maroon/25 text-maroon transition-colors hover:bg-maroon hover:text-ivory"
+            >
+              <Facebook className="h-4 w-4" />
+            </a>
+            <a
+              data-testid="footer-instagram-link"
+              href="https://www.instagram.com/manthangroupin"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Manthan Group on Instagram"
+              className="flex h-9 w-9 items-center justify-center rounded-full border border-maroon/25 text-maroon transition-colors hover:bg-maroon hover:text-ivory"
+            >
+              <Instagram className="h-4 w-4" />
+            </a>
+          </div>
           <p className="mt-3 max-w-2xl text-xs leading-relaxed text-ink/50">
             *Starting from prices. Payment plan subject to terms and availability.
             Manthan Legacy by Manthan Group (Karm Infra) · Vatva, Ahmedabad · RERA No. MAA15874 · www.manthangroup.in.

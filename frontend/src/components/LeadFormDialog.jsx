@@ -38,6 +38,7 @@ export const LeadFormDialog = ({ open, onOpenChange }) => {
   const [devCode, setDevCode] = useState("");
   const [answers, setAnswers] = useState({});
   const [error, setError] = useState("");
+  const [submitAttempted, setSubmitAttempted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [cooldown, setCooldown] = useState(0);
   const startedRef = useRef(false);
@@ -53,6 +54,7 @@ export const LeadFormDialog = ({ open, onOpenChange }) => {
       setError("");
       setOtp("");
       setDevCode("");
+      setSubmitAttempted(false);
     }
   }, [open]);
 
@@ -66,6 +68,7 @@ export const LeadFormDialog = ({ open, onOpenChange }) => {
 
   const sendOtp = async () => {
     setError("");
+    setSubmitAttempted(true);
     if (name.trim().length < 2) return setError("Please enter your full name");
     if (!phoneValid) return setError("Enter a valid 10-digit mobile number");
     if (!allAnswered) return setError("Please answer all 4 questions to get the brochure");
@@ -187,11 +190,22 @@ export const LeadFormDialog = ({ open, onOpenChange }) => {
               </p>
             </div>
             <div className="space-y-5 border-t border-maroon/10 pt-5">
-              {QUESTIONS.map((q, qi) => (
-                <div key={q.key} data-testid={`question-${qi + 1}`}>
-                  <p className="mb-2 text-sm font-semibold text-ink">
+              {QUESTIONS.map((q, qi) => {
+                const missing = submitAttempted && !answers[q.key];
+                return (
+                <div
+                  key={q.key}
+                  data-testid={`question-${qi + 1}`}
+                  className={`border-l-2 pl-3 transition-colors ${missing ? "border-destructive" : "border-transparent"}`}
+                >
+                  <p className={`mb-2 text-sm font-semibold ${missing ? "text-destructive" : "text-ink"}`}>
                     <span className="mr-1.5 font-display italic text-brass-dark">{qi + 1}.</span>
                     {q.label}
+                    {missing && (
+                      <span data-testid={`question-${qi + 1}-required`} className="ml-2 text-[10px] font-bold uppercase tracking-widest text-destructive">
+                        Required
+                      </span>
+                    )}
                   </p>
                   <div className="flex flex-wrap gap-2">
                     {q.options.map((opt) => {
@@ -213,7 +227,8 @@ export const LeadFormDialog = ({ open, onOpenChange }) => {
                     })}
                   </div>
                 </div>
-              ))}
+                );
+              })}
             </div>
             <div data-testid="send-otp-sticky-bar" className="sticky bottom-0 -mx-6 border-t border-maroon/10 bg-ivory px-6 pb-1 pt-3 sm:-mx-8 sm:px-8">
               {error && <p data-testid="lead-form-error" className="mb-2 text-sm font-medium text-destructive">{error}</p>}
