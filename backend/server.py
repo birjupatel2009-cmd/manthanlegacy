@@ -7,6 +7,7 @@ import os
 import re
 import random
 import logging
+import httpx
 from pathlib import Path
 from pydantic import BaseModel, Field, BeforeValidator
 from typing import List, Optional, Annotated, Any
@@ -68,6 +69,7 @@ class Lead(BaseDocument):
     budget: str
     timeline: str
     source: str = "landing_page"
+    crm_synced: bool = False
     created_at: str
 
 
@@ -82,6 +84,45 @@ def now_iso() -> str:
 
 def valid_phone(phone: str) -> bool:
     return bool(PHONE_RE.match(phone))
+
+
+DAEBUILD_URL = os.environ.get("DAEBUILD_WEBHOOK_URL")
+DAEBUILD_KEY = os.environ.get("DAEBUILD_API_KEY")
+
+
+async def push_to_daebuild(lead: "Lead") -> bool:
+    if not DAEBUILD_URL or not DAEBUILD_KEY:
+        return False
+    remarks = (
+        f"Interested in Vatva: {lead.interested_vatva} | "
+        f"Looking for: {lead.unit_type} | "
+        f"Budget: {lead.budget} | "
+        f"Plan to buy: {lead.timeline} | "
+        "Source: Manthan Legacy Landing Page"
+    )
+    payload = {
+        "lead_id": lead.id,
+        "api_version": "1.0",
+        "google_key": DAEBUILD_KEY,
+        "is_test": False,
+        "user_column_data": [
+            {"column_id": "FULL_NAME", "string_value": lead.name},
+            {"column_id": "PHONE_NUMBER", "string_value": f"+91{lead.phone}"},
+            {"column_id": "EMAIL", "string_value": ""},
+        ],
+        "remarks": remarks,
+    }
+    try:
+        async with httpx.AsyncClient(timeout=15) as http:
+            resp = await http.post(DAEBUILD_URL, json=payload)
+            data = resp.json()
+            ok = bool(data.get("response", {}).get("success"))
+            if not ok:
+                logger.warning("DaeBuild rejected lead %s: %s", lead.id, data)
+            return ok
+    except Exception:
+        logger.exception("DaeBuild sync failed for lead %s", lead.id)
+        return False
 
 
 @api_router.get("/")
@@ -154,7 +195,12 @@ async def create_lead(body: LeadCreate):
     )
     result = await db.leads.insert_one(lead.to_mongo())
     created = await db.leads.find_one({"_id": result.inserted_id})
-    return Lead.from_mongo(created)
+    created_lead = Lead.from_mongo(created)
+    crm_synced = await push_to_daebuild(created_lead)
+    if crm_synced:
+        await db.leads.update_one({"_id": result.inserted_id}, {"$set": {"crm_synced": True}})
+        created_lead.crm_synced = True
+    return created_lead
 
 
 @api_router.get("/leads", response_model=List[Lead])

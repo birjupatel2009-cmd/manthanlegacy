@@ -32,7 +32,8 @@ Build a fast-loading, mobile-first, responsive real estate project landing page 
 
 ## Updates (2026-08-29, later)
 - Special payment plan section: "Pay 10% or ₹4 Lakh now. Rest on possession." with Book Now / On Possession split, footer T&C footnote, *starting from pricing (₹37L* 2BHK / ₹47L* 3BHK) in hero and unit cards, header branding + call pill button.
-- Requested pending: WhatsApp OTP (needs Meta WABA credentials: WHATSAPP_PHONE_NUMBER_ID, access token, approved auth template), DaeBuild CRM webhook (needs webhook URL + API key from DaeBuild team).
+- DaeBuild CRM sync LIVE (2026-08-29): every OTP-verified lead POSTs to https://crm.manthangroup.in/daebuild/api_lead_google_ads.php?action=insertLeads using Google Ads webhook schema (google_key auth from backend/.env DAEBUILD_API_KEY). Lead doc gets crm_synced flag; CRM failure never blocks lead storage. NOTE: 4 test inquiries exist in CRM: TEST Sync Delete, TEST Sync Delete2, TEST Sync Delete3, CRM Sync Test — delete them in DaeBuild.
+- Requested pending: WhatsApp OTP (needs Meta WABA credentials: WHATSAPP_PHONE_NUMBER_ID, access token, approved auth template).
 
 ## Next Tasks
 1. Swap mocked OTP for real SMS provider (needs credentials).
