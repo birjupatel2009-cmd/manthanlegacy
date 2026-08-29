@@ -156,44 +156,8 @@ export default function LandingPage() {
 
       <Marquee />
 
-      {/* Chapter 01 — Location */}
-      <Chapter num="01" title="The Vatva Address">
-        <div className="mt-10 grid gap-10 md:grid-cols-2 md:gap-14">
-          <FadeUp delay={0.1}>
-            <div className="overflow-hidden rounded-tr-3xl rounded-bl-3xl border border-brass/40">
-              <img
-                src="/assets/facade.webp"
-                alt="Manthan Legacy tower facade"
-                loading="lazy"
-                className="aspect-[4/3] w-full object-cover"
-              />
-            </div>
-          </FadeUp>
-          <div className="flex flex-col justify-center">
-            <FadeUp delay={0.15}>
-              <p className="flex items-start gap-2 text-base leading-relaxed text-ink/75">
-                <MapPin className="mt-1 h-4 w-4 shrink-0 text-brass-dark" />
-                A prime two-road corner landmark in Vatva, East Ahmedabad — close to everything that matters, yet wrapped in shaded greens.
-              </p>
-            </FadeUp>
-            <ul data-testid="nearby-list" className="mt-8 divide-y divide-maroon/10">
-              {NEARBY.map(({ icon: Icon, place, time }, i) => (
-                <FadeUp key={place} delay={0.1 + i * 0.05}>
-                  <li className="flex items-center justify-between py-3.5">
-                    <span className="flex items-center gap-3 text-sm font-medium text-ink/80">
-                      <Icon className="h-4 w-4 text-brass-dark" /> {place}
-                    </span>
-                    <span className="font-display italic text-maroon">{time}</span>
-                  </li>
-                </FadeUp>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </Chapter>
-
-      {/* Chapter 02 — Residences */}
-      <Chapter num="02" title="Residences & Retail" className="bg-parchment/50">
+      {/* Chapter 01 — Residences */}
+      <Chapter num="01" title="Residences & Retail" className="bg-parchment/50">
         <div className="mt-10 grid gap-6 md:grid-cols-3">
           {[
             { img: "/assets/balcony.webp", name: "Big 2 BHK", size: "160–162 Sq. Yd.", note: "202 residences · Blocks A–D · From ₹37L*" },
@@ -226,44 +190,12 @@ export default function LandingPage() {
         </FadeUp>
       </Chapter>
 
-      {/* Chapter 03 — Open living */}
-      <Chapter num="03" title="70% Open to the Sky">
-        <div className="mt-10 grid gap-10 md:grid-cols-5 md:gap-14">
-          <FadeUp delay={0.1} className="md:col-span-3">
-            <div className="overflow-hidden rounded-tr-3xl rounded-bl-3xl border border-brass/40">
-              <img
-                src="/assets/masterplan.webp"
-                alt="Manthan Legacy master plan with landscaped open spaces"
-                loading="lazy"
-                className="w-full object-cover"
-              />
-            </div>
-          </FadeUp>
-          <div className="flex flex-col justify-center md:col-span-2">
-            <FadeUp delay={0.15}>
-              <p className="text-base leading-relaxed text-ink/75">
-                Over 1 lakh sq. ft. of pure open space — divine courtyards, tree-lined drive-ins and amenities for health, recreation and family bonding.
-              </p>
-            </FadeUp>
-            <ul data-testid="amenities-list" className="mt-7 grid gap-x-4 gap-y-2.5 sm:grid-cols-2 md:grid-cols-1">
-              {AMENITIES.map((a, i) => (
-                <FadeUp key={a} delay={0.08 + i * 0.03}>
-                  <li className="flex items-center gap-2.5 text-sm text-ink/75">
-                    <span className="inline-block h-1.5 w-1.5 rotate-45 bg-brass" /> {a}
-                  </li>
-                </FadeUp>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </Chapter>
-
       {/* Payment plan + final CTA */}
       <section data-testid="payment-plan-section" className="relative overflow-hidden bg-maroon-deep text-ivory">
         <div className="mx-auto max-w-6xl px-5 py-16 md:px-10 md:py-24">
           <FadeUp>
             <p className="mb-3 flex items-center gap-3 text-xs font-bold uppercase tracking-[0.3em] text-brass-light">
-              <span className="inline-block h-px w-10 bg-brass" /> Special Payment Plan
+              <span className="inline-block h-px w-10 bg-brass" /> Chapter 02 · Special Payment Plan
             </p>
             <h2 className="font-display text-4xl tracking-tight sm:text-5xl">
               Pay 10% or ₹4 Lakh now. <span className="italic text-brass-light">Rest on possession.</span>
@@ -309,6 +241,84 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
+
+      {/* Chapter 03 — Open living */}
+      <Chapter num="03" title="70% Open to the Sky">
+        <div className="mt-10 grid gap-10 md:grid-cols-5 md:gap-14">
+          <FadeUp delay={0.1} className="md:col-span-3">
+            <div className="overflow-hidden rounded-tr-3xl rounded-bl-3xl border border-brass/40">
+              <img
+                src="/assets/masterplan.webp"
+                alt="Manthan Legacy master plan with landscaped open spaces"
+                loading="lazy"
+                className="w-full object-cover"
+              />
+            </div>
+          </FadeUp>
+          <div className="flex flex-col justify-center md:col-span-2">
+            <FadeUp delay={0.15}>
+              <p className="text-base leading-relaxed text-ink/75">
+                Over 1 lakh sq. ft. of pure open space — divine courtyards, tree-lined drive-ins and amenities for health, recreation and family bonding.
+              </p>
+            </FadeUp>
+            <ul data-testid="amenities-list" className="mt-7 grid gap-x-4 gap-y-2.5 sm:grid-cols-2 md:grid-cols-1">
+              {AMENITIES.map((a, i) => (
+                <FadeUp key={a} delay={0.08 + i * 0.03}>
+                  <li className="flex items-center gap-2.5 text-sm text-ink/75">
+                    <span className="inline-block h-1.5 w-1.5 rotate-45 bg-brass" /> {a}
+                  </li>
+                </FadeUp>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </Chapter>
+
+      {/* Chapter 04 — Location */}
+      <Chapter num="04" title="The Vatva Address">
+        <div className="mt-10 grid gap-10 md:grid-cols-2 md:gap-14">
+          <FadeUp delay={0.1}>
+            <div className="overflow-hidden rounded-tr-3xl rounded-bl-3xl border border-brass/40">
+              <img
+                src="/assets/facade.webp"
+                alt="Manthan Legacy tower facade"
+                loading="lazy"
+                className="aspect-[4/3] w-full object-cover"
+              />
+            </div>
+          </FadeUp>
+          <div className="flex flex-col justify-center">
+            <FadeUp delay={0.15}>
+              <p className="flex items-start gap-2 text-base leading-relaxed text-ink/75">
+                <MapPin className="mt-1 h-4 w-4 shrink-0 text-brass-dark" />
+                A prime two-road corner landmark in Vatva, East Ahmedabad — close to everything that matters, yet wrapped in shaded greens.
+              </p>
+            </FadeUp>
+            <ul data-testid="nearby-list" className="mt-8 divide-y divide-maroon/10">
+              {NEARBY.map(({ icon: Icon, place, time }, i) => (
+                <FadeUp key={place} delay={0.1 + i * 0.05}>
+                  <li className="flex items-center justify-between py-3.5">
+                    <span className="flex items-center gap-3 text-sm font-medium text-ink/80">
+                      <Icon className="h-4 w-4 text-brass-dark" /> {place}
+                    </span>
+                    <span className="font-display italic text-maroon">{time}</span>
+                  </li>
+                </FadeUp>
+              ))}
+            </ul>
+            <FadeUp delay={0.3} className="mt-8">
+              <button
+                data-testid="download-brochure-btn-location"
+                onClick={() => openForm("location_section")}
+                className="group flex items-center justify-center gap-3 bg-maroon px-8 py-4 text-sm font-bold uppercase tracking-[0.2em] text-ivory transition-colors hover:bg-maroon-deep"
+              >
+                <Download className="h-4 w-4 transition-transform group-hover:translate-y-0.5" />
+                Download Brochure
+              </button>
+            </FadeUp>
+          </div>
+        </div>
+      </Chapter>
 
       {/* Footer */}
       <footer className="border-t border-maroon/10 bg-ivory px-5 py-10 pb-28 md:px-10 md:pb-10">

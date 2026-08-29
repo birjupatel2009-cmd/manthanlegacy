@@ -6,24 +6,24 @@ import { Loader2, ShieldCheck, ArrowLeft } from "lucide-react";
 
 const QUESTIONS = [
   {
-    key: "budget",
-    label: "What is your budget range?",
-    options: ["Under ₹40 Lakh", "₹40–60 Lakh", "₹60–80 Lakh", "₹80 Lakh+"],
-  },
-  {
-    key: "purpose",
-    label: "What is the purpose of purchase?",
-    options: ["Self-use", "Investment"],
+    key: "interested_vatva",
+    label: "Are you interested in Vatva?",
+    options: ["Yes", "No"],
   },
   {
     key: "unit_type",
-    label: "Which unit are you interested in?",
-    options: ["2 BHK", "3 BHK", "Retail Shop"],
+    label: "What are you looking for?",
+    options: ["2 BHK", "3 BHK"],
+  },
+  {
+    key: "budget",
+    label: "What is your budget?",
+    options: ["₹30–40 Lakh", "₹40–50 Lakh", "₹50 Lakh+"],
   },
   {
     key: "timeline",
     label: "When do you plan to buy?",
-    options: ["Immediately", "1–3 months", "3–6 months", "Just exploring"],
+    options: ["Within 1 Month", "1–3 Months", "3+ Months"],
   },
 ];
 
@@ -108,9 +108,9 @@ export const LeadFormDialog = ({ open, onOpenChange }) => {
       await api.post("/leads", {
         name: name.trim(),
         phone,
-        budget: answers.budget,
-        purpose: answers.purpose,
+        interested_vatva: answers.interested_vatva,
         unit_type: answers.unit_type,
+        budget: answers.budget,
         timeline: answers.timeline,
       });
       track("lead_submitted");

@@ -54,18 +54,18 @@ class OtpVerify(BaseModel):
 class LeadCreate(BaseModel):
     name: str = Field(min_length=2, max_length=80)
     phone: str
-    budget: str
-    purpose: str
+    interested_vatva: str
     unit_type: str
+    budget: str
     timeline: str
 
 
 class Lead(BaseDocument):
     name: str
     phone: str
-    budget: str
-    purpose: str
+    interested_vatva: str
     unit_type: str
+    budget: str
     timeline: str
     source: str = "landing_page"
     created_at: str
@@ -146,9 +146,9 @@ async def create_lead(body: LeadCreate):
     lead = Lead(
         name=body.name.strip(),
         phone=phone,
-        budget=body.budget,
-        purpose=body.purpose,
+        interested_vatva=body.interested_vatva,
         unit_type=body.unit_type,
+        budget=body.budget,
         timeline=body.timeline,
         created_at=now_iso(),
     )
