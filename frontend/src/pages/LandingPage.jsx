@@ -69,17 +69,22 @@ export default function LandingPage() {
   return (
     <div data-testid="landing-page" className="bg-ivory text-ink">
       {/* Nav */}
-      <header className="absolute inset-x-0 top-0 z-30 flex items-center justify-between px-5 py-5 md:px-10">
-        <div data-testid="brand-mark" className="font-display text-lg tracking-wide text-ivory">
-          MANTHAN <span className="italic text-brass-light">Legacy</span>
+      <header className="absolute inset-x-0 top-0 z-30 flex items-center justify-between border-b border-ivory/10 bg-maroon-deep/40 px-5 py-4 backdrop-blur-md md:px-10">
+        <div data-testid="brand-mark" className="leading-tight">
+          <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-brass-light">Manthan Group</p>
+          <p className="font-display text-xl tracking-wide text-ivory">
+            MANTHAN <span className="italic text-brass-light">Legacy</span>
+          </p>
         </div>
         <a
-          data-testid="nav-call-link"
+          data-testid="nav-call-btn"
           href="tel:+917001660016"
           onClick={() => track("call_click", { placement: "nav" })}
-          className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-ivory/90 transition-colors hover:text-brass-light"
+          className="flex items-center gap-2 rounded-full bg-brass px-4 py-2.5 text-xs font-bold uppercase tracking-[0.14em] text-maroon-deep transition-colors hover:bg-brass-light"
         >
-          <Phone className="h-3.5 w-3.5" /> <span className="hidden sm:inline">+91 70016 60016</span>
+          <Phone className="h-3.5 w-3.5" />
+          <span className="hidden sm:inline">+91 70016 60016</span>
+          <span className="sm:hidden">Call</span>
         </a>
       </header>
 
@@ -94,7 +99,7 @@ export default function LandingPage() {
         />
         <div className="absolute inset-0 bg-gradient-to-t from-maroon-deep via-maroon-deep/70 to-maroon-deep/30" />
         <div className="absolute inset-0 bg-gradient-to-r from-maroon-deep/60 via-transparent to-transparent" />
-        <div className="relative z-10 mx-auto w-full max-w-6xl px-5 pb-24 pt-36 md:px-10 md:pb-28">
+        <div className="relative z-10 mx-auto w-full max-w-6xl px-5 pb-32 pt-32 md:px-10 md:pb-36">
           <RevealLine delay={0.15} className="mb-5 text-[11px] font-bold uppercase tracking-[0.35em] text-brass-light md:text-xs">
             By Manthan Group · RERA No. MAA15874
           </RevealLine>
@@ -121,7 +126,9 @@ export default function LandingPage() {
             </button>
             <div className="text-sm text-ivory/80">
               <span className="block text-[11px] uppercase tracking-[0.25em] text-ivory/50">Starting Price</span>
-              <span data-testid="hero-price" className="font-display text-lg italic text-ivory">Price on Request</span>
+              <span data-testid="hero-price" className="block font-display text-lg italic leading-snug text-ivory">
+                2 BHK starting from ₹37L* <span className="text-brass-light">·</span> 3 BHK starting from ₹47L*
+              </span>
             </div>
           </motion.div>
         </div>
@@ -189,8 +196,8 @@ export default function LandingPage() {
       <Chapter num="02" title="Residences & Retail" className="bg-parchment/50">
         <div className="mt-10 grid gap-6 md:grid-cols-3">
           {[
-            { img: "/assets/balcony.webp", name: "2 BHK Homes", size: "160–162 Sq. Yd.", note: "202 residences · Blocks A–D" },
-            { img: "/assets/courtyard.webp", name: "3 BHK Homes", size: "204–211 Sq. Yd.", note: "156 residences · Blocks E–G" },
+            { img: "/assets/balcony.webp", name: "Big 2 BHK", size: "160–162 Sq. Yd.", note: "202 residences · Blocks A–D · From ₹37L*" },
+            { img: "/assets/courtyard.webp", name: "Spacious 3 BHK", size: "204–211 Sq. Yd.", note: "156 residences · Blocks E–G · From ₹47L*" },
             { img: "/assets/greens.webp", name: "Retail & Showrooms", size: "133 Units", note: "High-street shops on a two-road corner" },
           ].map((card, i) => (
             <FadeUp key={card.name} delay={i * 0.08}>
