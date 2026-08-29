@@ -7,8 +7,10 @@ import { API, track } from "../lib/api";
 export default function ThankYouPage() {
   useEffect(() => {
     track("page_view", { page: "thank_you" });
+    if (sessionStorage.getItem("brochure_allowed") !== "1") return;
     if (sessionStorage.getItem("brochure_dl")) return;
     sessionStorage.setItem("brochure_dl", "1");
+    sessionStorage.removeItem("brochure_allowed");
     track("brochure_download");
     const a = document.createElement("a");
     a.href = `${API}/brochure`;

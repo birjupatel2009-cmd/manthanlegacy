@@ -115,6 +115,7 @@ export const LeadFormDialog = ({ open, onOpenChange }) => {
       });
       track("lead_submitted");
       sessionStorage.removeItem("brochure_dl");
+      sessionStorage.setItem("brochure_allowed", "1");
       onOpenChange(false);
       navigate("/thank-you");
     } catch (e) {
