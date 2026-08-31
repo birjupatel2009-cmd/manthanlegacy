@@ -90,6 +90,13 @@ DAEBUILD_URL = os.environ.get("DAEBUILD_WEBHOOK_URL")
 DAEBUILD_KEY = os.environ.get("DAEBUILD_API_KEY")
 
 
+BUDGET_MAP = {
+    "₹30–40 Lakh": ("3000000", "4000000"),
+    "₹40–50 Lakh": ("4000000", "5000000"),
+    "₹50 Lakh+": ("5000000", "15000000"),
+}
+
+
 async def push_to_daebuild(lead: "Lead") -> bool:
     if not DAEBUILD_URL or not DAEBUILD_KEY:
         return False
@@ -97,24 +104,29 @@ async def push_to_daebuild(lead: "Lead") -> bool:
         f"Interested in Vatva: {lead.interested_vatva} | "
         f"Looking for: {lead.unit_type} | "
         f"Budget: {lead.budget} | "
-        f"Plan to buy: {lead.timeline} | "
-        "Source: Manthan Legacy Landing Page"
+        f"Plan to buy: {lead.timeline}"
     )
+    min_budget, max_budget = BUDGET_MAP.get(lead.budget, ("", ""))
     payload = {
         "lead_id": lead.id,
         "api_version": "1.0",
         "google_key": DAEBUILD_KEY,
         "is_test": False,
         "user_column_data": [
-            {"column_id": "FULL_NAME", "string_value": lead.name},
-            {"column_id": "PHONE_NUMBER", "string_value": f"+91{lead.phone}"},
-            {"column_id": "EMAIL", "string_value": ""},
-            {"column_name": "Are you interested in Vatva?", "string_value": lead.interested_vatva},
-            {"column_name": "What are you looking for?", "string_value": lead.unit_type},
-            {"column_name": "What is your budget?", "string_value": lead.budget},
-            {"column_name": "When do you plan to buy?", "string_value": lead.timeline},
+            {"column_name": "Project Name", "string_value": "Manthan Legacy", "column_id": "project_name"},
+            {"column_name": "Full Name", "string_value": lead.name, "column_id": "FULL_NAME"},
+            {"column_name": "Phone", "string_value": f"+91{lead.phone}", "column_id": "PHONE_NUMBER"},
+            {"column_name": "User Email", "string_value": "", "column_id": "email"},
+            {"column_name": "City", "string_value": "Ahmedabad", "column_id": "city"},
+            {"column_name": "date", "string_value": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S"), "column_id": "lead_date"},
+            {"column_name": "Preference Name", "string_value": lead.unit_type, "column_id": "looking_for"},
+            {"column_name": "Source", "string_value": "Website", "column_id": "source"},
+            {"column_name": "Sub Source", "string_value": "Manthan Legacy Landing Page", "column_id": "sub_source"},
+            {"column_name": "Budget Range", "string_value": f"{min_budget}-{max_budget}" if min_budget else lead.budget, "column_id": "combine_budget"},
+            {"column_name": "Minimum Budget", "string_value": min_budget, "column_id": "min_budget"},
+            {"column_name": "Maximum Budget", "string_value": max_budget, "column_id": "max_budget"},
+            {"column_name": "Remarks", "string_value": remarks, "column_id": "remarks"},
         ],
-        "remarks": remarks,
     }
     try:
         async with httpx.AsyncClient(timeout=15) as http:
