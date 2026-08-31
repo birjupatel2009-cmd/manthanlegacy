@@ -33,7 +33,8 @@ Build a fast-loading, mobile-first, responsive real estate project landing page 
 ## Updates (2026-08-29, later)
 - Special payment plan section: "Pay 10% or ₹4 Lakh now. Rest on possession." with Book Now / On Possession split, footer T&C footnote, *starting from pricing (₹37L* 2BHK / ₹47L* 3BHK) in hero and unit cards, header branding + call pill button.
 - DaeBuild CRM sync LIVE (2026-08-29): every OTP-verified lead POSTs to https://crm.manthangroup.in/daebuild/api_lead_google_ads.php?action=insertLeads using Google Ads webhook schema (google_key auth from backend/.env DAEBUILD_API_KEY). Payload maps: project_name=Manthan Legacy, FULL_NAME, PHONE_NUMBER (+91), city=Ahmedabad, looking_for=unit, combine/min/max_budget (₹30–40L→3000000-4000000 etc.), source=Website, sub_source=landing page, remarks (column_id "remarks", lowercase — confirmed via CRM echo) = all 4 answers summary. CRM dedups by phone (error 0008). crm_synced flag on lead; CRM failure never blocks storage. Test inquiries to delete in DaeBuild: TEST Sync Delete (×3), CRM Sync Test, TEST Remark A–F, TEST CustomQ Delete, Answers Sync Test, TEST Rmk variants, TEST Remarks Echo, Remarks Verify Test.
-- Requested pending: WhatsApp OTP (needs Meta WABA credentials: WHATSAPP_PHONE_NUMBER_ID, access token, approved auth template).
+- WhatsApp OTP LIVE (2026-08-29) via NXC WABA (NXCMSG): POST https://waba.nxccontrols.in/api/create-message-json with appkey/authkey (backend/.env NXC_*), template "landing_page_verification" (en_US), variables.variableKey1 = OTP, buttons b1_type=url/b1_value=OTP (copy-code button). Success = message_status "Success". Without creds, falls back to demo mode (dev_code shown in UI). Backend OTP verify/attempts/expiry unchanged.
+- Requested pending: none outstanding.
 
 ## Next Tasks
 1. Swap mocked OTP for real SMS provider (needs credentials).

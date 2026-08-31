@@ -36,6 +36,7 @@ export const LeadFormDialog = ({ open, onOpenChange }) => {
   const [phone, setPhone] = useState("");
   const [otp, setOtp] = useState("");
   const [devCode, setDevCode] = useState("");
+  const [channel, setChannel] = useState("demo");
   const [answers, setAnswers] = useState({});
   const [error, setError] = useState("");
   const [submitAttempted, setSubmitAttempted] = useState(false);
@@ -76,6 +77,7 @@ export const LeadFormDialog = ({ open, onOpenChange }) => {
     try {
       const { data } = await api.post("/otp/send", { phone });
       setDevCode(data.dev_code || "");
+      setChannel(data.channel || "demo");
       setCooldown(RESEND_SECONDS);
       setStep("otp");
       track("otp_sent");
@@ -145,7 +147,7 @@ export const LeadFormDialog = ({ open, onOpenChange }) => {
           </DialogTitle>
           <p className="text-sm text-ink/60">
             {step === "form" && "Answer 4 quick questions, verify your number, and get the brochure instantly."}
-            {step === "otp" && `OTP sent to +91 ${phone}`}
+            {step === "otp" && (channel === "whatsapp" ? `OTP sent on WhatsApp to +91 ${phone}` : `OTP sent to +91 ${phone}`)}
           </p>
         </DialogHeader>
 

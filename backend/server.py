@@ -89,6 +89,35 @@ def valid_phone(phone: str) -> bool:
 DAEBUILD_URL = os.environ.get("DAEBUILD_WEBHOOK_URL")
 DAEBUILD_KEY = os.environ.get("DAEBUILD_API_KEY")
 
+NXC_APP_KEY = os.environ.get("NXC_APP_KEY")
+NXC_AUTH_KEY = os.environ.get("NXC_AUTH_KEY")
+NXC_TEMPLATE = os.environ.get("NXC_OTP_TEMPLATE")
+NXC_TEMPLATE_LANG = os.environ.get("NXC_OTP_TEMPLATE_LANG", "en_US")
+NXC_API_URL = os.environ.get("NXC_API_URL")
+
+
+def nxc_configured() -> bool:
+    return all([NXC_APP_KEY, NXC_AUTH_KEY, NXC_TEMPLATE, NXC_API_URL])
+
+
+async def send_whatsapp_otp(phone: str, code: str) -> bool:
+    payload = {
+        "appkey": NXC_APP_KEY,
+        "authkey": NXC_AUTH_KEY,
+        "to": [f"91{phone}"],
+        "template_id": NXC_TEMPLATE,
+        "language": NXC_TEMPLATE_LANG,
+        "variables": {"variableKey1": code},
+        "buttons": {"b1_type": "url", "b1_value": code},
+    }
+    async with httpx.AsyncClient(timeout=20) as http:
+        resp = await http.post(NXC_API_URL, json=payload)
+        data = resp.json() if resp.headers.get("content-type", "").startswith("application/json") else {}
+        ok = resp.status_code == 200 and data.get("message_status") == "Success"
+        if not ok:
+            logger.warning("NXC OTP send failed (%s): %s", resp.status_code, resp.text[:300])
+        return ok
+
 
 BUDGET_MAP = {
     "₹30–40 Lakh": ("3000000", "4000000"),
@@ -163,8 +192,18 @@ async def send_otp(body: OtpSend):
         }},
         upsert=True,
     )
-    # MOCKED OTP: no SMS provider configured, code returned for demo
-    return {"sent": True, "dev_code": code, "expires_in_minutes": OTP_TTL_MIN}
+    channel = "demo"
+    if nxc_configured():
+        try:
+            if await send_whatsapp_otp(phone, code):
+                channel = "whatsapp"
+        except Exception:
+            logger.exception("NXC OTP send error")
+    resp = {"sent": True, "expires_in_minutes": OTP_TTL_MIN, "channel": channel}
+    if channel == "demo":
+        # MOCKED OTP: NXC WhatsApp credentials not configured yet, code returned for demo
+        resp["dev_code"] = code
+    return resp
 
 
 @api_router.post("/otp/verify")
