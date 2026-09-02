@@ -21,14 +21,15 @@ const FACTS = [
 
 const NEARBY = [
   { icon: Route, place: "Ring Road", time: "3 min" },
-  { icon: ShoppingBasket, place: "Osia & D-Mart", time: "4 min" },
+  { icon: ShoppingBasket, place: "D-Mart", time: "4 min" },
   { icon: GraduationCap, place: "International Schools", time: "5 min" },
   { icon: TrainFront, place: "Railway Station", time: "7 min" },
   { icon: Hospital, place: "Zydus Hospital", time: "8 min" },
 ];
 
 const AMENITIES = [
-  "Clubhouse & Multi-purpose Hall", "Gymnasium & Yoga Room", "Temple & Divine Courtyards",
+  "Big Garden & 70% Open Area", "Temple",
+  "Clubhouse & Multi-purpose Hall", "Gymnasium & Yoga Room",
   "Jogging Track & Skating Rink", "Children's Play Area", "Library & Co-working Space",
   "Landscaped Gardens & Gazebo", "24×7 Security with CCTV", "Senior Citizen Sit-outs",
 ];
@@ -333,7 +334,7 @@ export default function LandingPage() {
           </FadeUp>
           <FadeUp delay={0.1}>
             <ul className="mt-7 flex flex-wrap gap-2.5">
-              {["Manthan Grees", "Manthan 222", "Bijal Homes", "Manthan-25 Bungalows", "Manthan-25 Flats", "& more"].map((p) => (
+              {["Manthan Greens", "Manthan 222", "Bijal Homes", "Manthan-25 Bungalows", "Manthan-25 Flats", "& more"].map((p) => (
                 <li
                   key={p}
                   data-testid={`completed-project-${p.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`}
