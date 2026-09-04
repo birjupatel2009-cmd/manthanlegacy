@@ -66,12 +66,20 @@ export const LeadFormDialog = ({ open, onOpenChange }) => {
   }, [cooldown]);
 
   const phoneValid = /^[6-9]\d{9}$/.test(phone);
+  const nameBad = submitAttempted && name.trim().length < 2;
+  const phoneBad = submitAttempted && !phoneValid;
 
   const sendOtp = async () => {
     setError("");
     setSubmitAttempted(true);
-    if (name.trim().length < 2) return setError("Please enter your full name");
-    if (!phoneValid) return setError("Enter a valid 10-digit mobile number");
+    if (name.trim().length < 2) {
+      document.querySelector('[data-testid="lead-name-input"]')?.scrollIntoView({ behavior: "smooth", block: "center" });
+      return setError("Please enter your full name");
+    }
+    if (!phoneValid) {
+      document.querySelector('[data-testid="lead-phone-input"]')?.scrollIntoView({ behavior: "smooth", block: "center" });
+      return setError("Enter a valid 10-digit mobile number");
+    }
     if (!allAnswered) {
       const firstMissing = QUESTIONS.findIndex((q) => !answers[q.key]);
       setTimeout(() => {
@@ -168,7 +176,7 @@ export const LeadFormDialog = ({ open, onOpenChange }) => {
               <input
                 id="lead-name"
                 data-testid="lead-name-input"
-                className={inputCls}
+                className={`${inputCls} ${nameBad ? "!border-destructive bg-destructive/5" : ""}`}
                 placeholder="Your full name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
@@ -179,7 +187,7 @@ export const LeadFormDialog = ({ open, onOpenChange }) => {
               <label htmlFor="lead-phone" className="mb-1 block text-xs font-semibold uppercase tracking-wider text-maroon">
                 Mobile Number
               </label>
-              <div className="flex items-stretch border border-maroon/25 focus-within:border-maroon transition-colors">
+              <div className={`flex items-stretch border transition-colors ${phoneBad ? "border-destructive bg-destructive/5" : "border-maroon/25 focus-within:border-maroon"}`}>
                 <span className="flex items-center border-r border-maroon/25 bg-parchment px-3 text-sm font-semibold text-maroon">
                   +91
                 </span>
