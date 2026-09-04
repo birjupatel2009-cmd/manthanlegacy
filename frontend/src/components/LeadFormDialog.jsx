@@ -72,7 +72,15 @@ export const LeadFormDialog = ({ open, onOpenChange }) => {
     setSubmitAttempted(true);
     if (name.trim().length < 2) return setError("Please enter your full name");
     if (!phoneValid) return setError("Enter a valid 10-digit mobile number");
-    if (!allAnswered) return setError("Please answer all 4 questions to get the brochure");
+    if (!allAnswered) {
+      const firstMissing = QUESTIONS.findIndex((q) => !answers[q.key]);
+      setTimeout(() => {
+        document
+          .querySelector(`[data-testid="question-${firstMissing + 1}"]`)
+          ?.scrollIntoView({ behavior: "smooth", block: "center" });
+      }, 60);
+      return setError("Please answer all 4 questions to get the brochure");
+    }
     setLoading(true);
     try {
       const { data } = await api.post("/otp/send", { phone });
