@@ -27,19 +27,37 @@ export const EmiCalculator = () => {
   const [years, setYears] = useState(25);
   const [income, setIncome] = useState(100000);
 
-  const { emi, eligible, yearly, tenPct } = useMemo(() => {
+  const { emi, eligible, yearly, stepUp, combined } = useMemo(() => {
     const r = rate / 1200;
     const n = years * 12;
     const pow = Math.pow(1 + r, n);
     const e = (amount * r * pow) / (pow - 1);
     const maxEmi = income * 0.6;
     const elig = (maxEmi * (pow - 1)) / (r * pow);
-    const accel = (mult) => {
-      const E = e * mult;
-      const m = Math.log(E / (E - amount * r)) / Math.log(1 + r);
-      return { years: (m / 12).toFixed(1), saved: e * n - E * m };
+    const simulate = (annualStepUp, extraYearly) => {
+      let bal = amount;
+      let paid = 0;
+      let m = 0;
+      while (bal > 0.5 && m < 1200) {
+        m += 1;
+        const yearIndex = Math.ceil(m / 12) - 1;
+        const monthlyEmi = e * (annualStepUp ? Math.pow(1.1, yearIndex) : 1);
+        bal = bal * (1 + r);
+        let thisPay = monthlyEmi;
+        if (extraYearly && m % 12 === 0) thisPay += monthlyEmi;
+        if (thisPay > bal) thisPay = bal;
+        bal -= thisPay;
+        paid += thisPay;
+      }
+      return { years: (m / 12).toFixed(1), saved: Math.max(0, e * n - paid) };
     };
-    return { emi: e, eligible: elig, yearly: accel(13 / 12), tenPct: accel(1.1) };
+    return {
+      emi: e,
+      eligible: elig,
+      yearly: simulate(false, true),
+      stepUp: simulate(true, false),
+      combined: simulate(true, true),
+    };
   }, [amount, rate, years, income]);
 
   return (
@@ -149,15 +167,21 @@ export const EmiCalculator = () => {
                 <div className="mt-5 space-y-3 border-t border-ivory/15 pt-5">
                   <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-brass-light">Smart ways to finish early</p>
                   <div data-testid="emi-tip-extra-yearly" className="border border-ivory/15 bg-ivory/5 px-4 py-3">
-                    <p className="text-sm font-semibold text-ivory">Pay 1 extra EMI every year</p>
+                    <p className="text-sm font-semibold text-ivory">Pay 1 extra EMI to principal every year</p>
                     <p data-testid="emi-tip-extra-yearly-result" className="mt-0.5 text-xs text-ivory/70">
                       Loan done in ~{yearly.years} yrs · saves {fmt(yearly.saved)} interest
                     </p>
                   </div>
-                  <div data-testid="emi-tip-ten-percent" className="border border-ivory/15 bg-ivory/5 px-4 py-3">
-                    <p className="text-sm font-semibold text-ivory">Add just 10% to every EMI</p>
-                    <p data-testid="emi-tip-ten-percent-result" className="mt-0.5 text-xs text-ivory/70">
-                      Loan done in ~{tenPct.years} yrs · saves {fmt(tenPct.saved)} interest
+                  <div data-testid="emi-tip-step-up" className="border border-ivory/15 bg-ivory/5 px-4 py-3">
+                    <p className="text-sm font-semibold text-ivory">Increase EMI by 10% every year</p>
+                    <p data-testid="emi-tip-step-up-result" className="mt-0.5 text-xs text-ivory/70">
+                      Loan done in ~{stepUp.years} yrs · saves {fmt(stepUp.saved)} interest
+                    </p>
+                  </div>
+                  <div data-testid="emi-tip-combined" className="border border-brass bg-brass/15 px-4 py-3">
+                    <p className="text-sm font-semibold text-brass-light">Do both together</p>
+                    <p data-testid="emi-tip-combined-result" className="mt-0.5 text-xs text-ivory">
+                      Loan done in ~{combined.years} yrs · saves {fmt(combined.saved)} interest
                     </p>
                   </div>
                 </div>
