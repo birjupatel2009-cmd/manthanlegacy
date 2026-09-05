@@ -16,14 +16,17 @@ export const EmiCalculator = () => {
   const [amount, setAmount] = useState(3700000);
   const [rate, setRate] = useState(8.5);
   const [years, setYears] = useState(20);
+  const [income, setIncome] = useState(100000);
 
-  const { emi, totalInterest, total } = useMemo(() => {
+  const { emi, totalInterest, total, eligible } = useMemo(() => {
     const r = rate / 1200;
     const n = years * 12;
     const pow = Math.pow(1 + r, n);
     const e = (amount * r * pow) / (pow - 1);
-    return { emi: e, totalInterest: e * n - amount, total: e * n };
-  }, [amount, rate, years]);
+    const maxEmi = income * 0.45;
+    const elig = (maxEmi * (pow - 1)) / (r * pow);
+    return { emi: e, totalInterest: e * n - amount, total: e * n, eligible: elig };
+  }, [amount, rate, years, income]);
 
   return (
     <section data-testid="emi-section" className="border-t border-maroon/10 bg-ivory">
@@ -86,6 +89,29 @@ export const EmiCalculator = () => {
             </div>
 
             <div>
+              <div className="mb-2 flex items-baseline justify-between">
+                <label htmlFor="emi-income" className="text-xs font-bold uppercase tracking-[0.18em] text-ink/60">
+                  Monthly Income
+                </label>
+                <span data-testid="emi-income-value" className="font-display text-xl text-maroon">₹{income.toLocaleString("en-IN")}</span>
+              </div>
+              <input
+                id="emi-income"
+                data-testid="emi-income-slider"
+                type="range"
+                min={20000}
+                max={500000}
+                step={5000}
+                value={income}
+                onChange={(e) => setIncome(Number(e.target.value))}
+                className="w-full accent-maroon"
+              />
+              <div className="mt-1 flex justify-between text-[10px] uppercase tracking-wider text-ink/40">
+                <span>₹20 K</span><span>₹5 L</span>
+              </div>
+            </div>
+
+            <div>
               <p className="mb-2 text-xs font-bold uppercase tracking-[0.18em] text-ink/60">Tenure</p>
               <div className="flex flex-wrap gap-2">
                 {TENURES.map((y) => (
@@ -113,7 +139,11 @@ export const EmiCalculator = () => {
                 <p data-testid="emi-result" className="mt-3 font-display text-5xl italic tracking-tight text-ivory md:text-6xl">
                   ₹{Math.round(emi).toLocaleString("en-IN")}
                 </p>
-                <div className="mt-6 space-y-2.5 border-t border-ivory/15 pt-5 text-sm">
+                <div data-testid="emi-eligibility" className="mt-5 border border-brass/40 bg-ivory/5 px-4 py-3.5">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-brass-light">Loan you may be eligible for</p>
+                  <p data-testid="emi-eligible-amount" className="mt-1 font-display text-2xl italic text-ivory">{fmt(eligible)}</p>
+                </div>
+                <div className="mt-5 space-y-2.5 border-t border-ivory/15 pt-5 text-sm">
                   <div className="flex justify-between text-ivory/75">
                     <span>Total interest</span>
                     <span data-testid="emi-total-interest" className="font-semibold text-ivory">{fmt(totalInterest)}</span>
@@ -124,7 +154,7 @@ export const EmiCalculator = () => {
                   </div>
                 </div>
                 <p className="mt-5 text-xs leading-relaxed text-ivory/55">
-                  Indicative only. Banks typically approve EMIs up to 40–50% of your monthly income.
+                  Indicative only. Eligibility assumes banks allow EMI up to ~45% of monthly income at the selected rate and tenure.
                 </p>
               </div>
               <a
