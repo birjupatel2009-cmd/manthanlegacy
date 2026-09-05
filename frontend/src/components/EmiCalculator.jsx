@@ -65,6 +65,29 @@ export const EmiCalculator = () => {
           <FadeUp delay={0.1} className="space-y-8">
             <div>
               <div className="mb-2 flex items-baseline justify-between">
+                <label htmlFor="emi-income" className="text-xs font-bold uppercase tracking-[0.18em] text-ink/60">
+                  Monthly Income
+                </label>
+                <span data-testid="emi-income-value" className="font-display text-xl text-maroon">₹{income.toLocaleString("en-IN")}</span>
+              </div>
+              <input
+                id="emi-income"
+                data-testid="emi-income-slider"
+                type="range"
+                min={20000}
+                max={500000}
+                step={5000}
+                value={income}
+                onChange={(e) => setIncome(Number(e.target.value))}
+                className="w-full accent-maroon"
+              />
+              <div className="mt-1 flex justify-between text-[10px] uppercase tracking-wider text-ink/40">
+                <span>₹20 K</span><span>₹5 L</span>
+              </div>
+            </div>
+
+            <div>
+              <div className="mb-2 flex items-baseline justify-between">
                 <label htmlFor="emi-amount" className="text-xs font-bold uppercase tracking-[0.18em] text-ink/60">
                   Loan Amount
                 </label>
@@ -109,27 +132,9 @@ export const EmiCalculator = () => {
               </div>
             </div>
 
-            <div>
-              <div className="mb-2 flex items-baseline justify-between">
-                <label htmlFor="emi-income" className="text-xs font-bold uppercase tracking-[0.18em] text-ink/60">
-                  Monthly Income
-                </label>
-                <span data-testid="emi-income-value" className="font-display text-xl text-maroon">₹{income.toLocaleString("en-IN")}</span>
-              </div>
-              <input
-                id="emi-income"
-                data-testid="emi-income-slider"
-                type="range"
-                min={20000}
-                max={500000}
-                step={5000}
-                value={income}
-                onChange={(e) => setIncome(Number(e.target.value))}
-                className="w-full accent-maroon"
-              />
-              <div className="mt-1 flex justify-between text-[10px] uppercase tracking-wider text-ink/40">
-                <span>₹20 K</span><span>₹5 L</span>
-              </div>
+            <div data-testid="emi-eligibility" className="border border-brass/50 bg-brass/10 px-4 py-3.5">
+              <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-brass-dark">Loan you may be eligible for</p>
+              <p data-testid="emi-eligible-amount" className="mt-1 font-display text-2xl italic text-maroon">{fmt(eligible)}</p>
             </div>
 
             <div>
@@ -160,10 +165,6 @@ export const EmiCalculator = () => {
                 <p data-testid="emi-result" className="mt-3 font-display text-5xl italic tracking-tight text-ivory md:text-6xl">
                   ₹{Math.round(emi).toLocaleString("en-IN")}
                 </p>
-                <div data-testid="emi-eligibility" className="mt-5 border border-brass/40 bg-ivory/5 px-4 py-3.5">
-                  <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-brass-light">Loan you may be eligible for</p>
-                  <p data-testid="emi-eligible-amount" className="mt-1 font-display text-2xl italic text-ivory">{fmt(eligible)}</p>
-                </div>
                 <div className="mt-5 space-y-3 border-t border-ivory/15 pt-5">
                   <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-brass-light">Smart ways to finish early</p>
                   <div data-testid="emi-tip-extra-yearly" className="border border-ivory/15 bg-ivory/5 px-4 py-3">

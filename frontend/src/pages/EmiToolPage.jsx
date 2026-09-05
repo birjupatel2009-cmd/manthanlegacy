@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Phone } from "lucide-react";
+import { Phone } from "lucide-react";
 import { EmiCalculator } from "../components/EmiCalculator";
 import { FadeUp } from "../components/reveal";
 import { track } from "../lib/api";
@@ -13,12 +13,11 @@ export default function EmiToolPage() {
   return (
     <div data-testid="emi-tool-page" className="min-h-[100svh] bg-ivory">
       <header className="sticky top-0 z-30 flex items-center justify-between border-b border-maroon/10 bg-ivory/90 px-5 py-4 backdrop-blur-md">
-        <Link
-          to="/"
-          data-testid="emi-back-link"
-          className="flex items-center gap-2 text-sm font-semibold text-maroon transition-colors hover:text-brass-dark"
-        >
-          <ArrowLeft className="h-4 w-4" /> Manthan Legacy
+        <Link to="/" data-testid="emi-back-link" className="leading-tight">
+          <span className="block text-[9px] font-bold uppercase tracking-[0.28em] text-brass-dark">Manthan Group</span>
+          <span className="font-display text-lg tracking-wide text-maroon">
+            MANTHAN <span className="italic text-brass-dark">Legacy</span>
+          </span>
         </Link>
         <a
           data-testid="emi-call-btn"
@@ -48,8 +47,13 @@ export default function EmiToolPage() {
         </FadeUp>
       </main>
 
-      <footer className="border-t border-maroon/10 px-5 py-6 text-center text-xs text-ink/45">
-        Manthan Legacy · Vatva, Ahmedabad · RERA No. MAA15874
+      <footer className="border-t border-maroon/10 px-5 py-8 text-center">
+        <p className="font-display text-base text-maroon">
+          MANTHAN <span className="italic text-brass-dark">Legacy</span>
+        </p>
+        <p className="mt-2 text-xs leading-relaxed text-ink/45">
+          A Manthan Group initiative · 14+ years · 500+ homes delivered · RERA No. MAA15874
+        </p>
       </footer>
     </div>
   );
