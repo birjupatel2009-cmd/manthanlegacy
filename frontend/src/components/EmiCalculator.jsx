@@ -23,24 +23,13 @@ export const EmiCalculator = () => {
     const n = years * 12;
     const pow = Math.pow(1 + r, n);
     const e = (amount * r * pow) / (pow - 1);
-    const maxEmi = income * 0.45;
+    const maxEmi = income * 0.6;
     const elig = (maxEmi * (pow - 1)) / (r * pow);
     return { emi: e, totalInterest: e * n - amount, total: e * n, eligible: elig };
   }, [amount, rate, years, income]);
 
   return (
-    <section data-testid="emi-section" className="border-t border-maroon/10 bg-ivory">
-      <div className="mx-auto max-w-6xl px-5 py-16 md:px-10 md:py-24">
-        <FadeUp>
-          <p className="mb-3 flex items-center gap-3 text-xs font-bold uppercase tracking-[0.3em] text-brass-dark">
-            <span className="inline-block h-px w-10 bg-brass" /> Plan Your Purchase
-          </p>
-          <h2 className="font-display text-4xl tracking-tight text-maroon sm:text-5xl">
-            Know your EMI <span className="italic text-brass-dark">in seconds.</span>
-          </h2>
-        </FadeUp>
-
-        <div className="mt-10 grid gap-10 md:grid-cols-2 md:gap-16">
+    <div data-testid="emi-tool" className="grid gap-8 md:grid-cols-2 md:gap-14">
           <FadeUp delay={0.1} className="space-y-8">
             <div>
               <div className="mb-2 flex items-baseline justify-between">
@@ -154,7 +143,7 @@ export const EmiCalculator = () => {
                   </div>
                 </div>
                 <p className="mt-5 text-xs leading-relaxed text-ivory/55">
-                  Indicative only. Eligibility assumes banks allow EMI up to ~45% of monthly income at the selected rate and tenure.
+                  Indicative only. Eligibility assumes banks allow EMI up to ~60% of monthly income (can go up to 65% with strong credit) at the selected rate and tenure.
                 </p>
               </div>
               <a
@@ -169,8 +158,6 @@ export const EmiCalculator = () => {
               </a>
             </div>
           </FadeUp>
-        </div>
-      </div>
-    </section>
+    </div>
   );
 };

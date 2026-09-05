@@ -5,6 +5,7 @@ import Lenis from "lenis";
 import { MotionConfig } from "framer-motion";
 import { Toaster } from "sonner";
 import LandingPage from "@/pages/LandingPage";
+import EmiToolPage from "@/pages/EmiToolPage";
 import ThankYouPage from "@/pages/ThankYouPage";
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<LandingPage />} />
+            <Route path="/emi" element={<EmiToolPage />} />
             <Route path="/thank-you" element={<ThankYouPage />} />
           </Routes>
         </BrowserRouter>

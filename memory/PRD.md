@@ -27,7 +27,7 @@ Build a fast-loading, mobile-first, responsive real estate project landing page 
 - E2E via screenshots: hero, dialog steps, full funnel to /thank-you, mobile sticky CTA (390px).
 
 ## Updates (2026-09-05)
-- EMI calculator section ("Know your EMI in seconds") after the payment plan chapter: loan amount slider (₹5L–₹1.5Cr), interest slider (7–12%), tenure chips (10–30 yrs); live monthly EMI + total interest/payment; "Discuss on WhatsApp" prefilled with the calculation; tracks whatsapp_click placement=emi_tool.
+- EMI & eligibility tool moved to dedicated mobile-first page /emi (EmiToolPage: sticky header with back link + call button, no sign-up). Landing page payment chapter links to it ("Check your EMI & loan eligibility"). Eligibility at 60% of monthly income (note mentions up to 65% with strong credit). Inputs: loan amount ₹5L–₹1.5Cr, rate 7–12%, income ₹20K–₹5L, tenure 10–30y. "Discuss on WhatsApp" prefilled; page_view tracked.
 
 ## Backlog
 - P0: Real SMS OTP (Twilio/MSG91 — needs user API keys).

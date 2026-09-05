@@ -7,7 +7,7 @@ import {
 } from "lucide-react";
 import { RevealLine, FadeUp } from "../components/reveal";
 import { Marquee } from "../components/Marquee";
-import { EmiCalculator } from "../components/EmiCalculator";
+import { Link } from "react-router-dom";
 import { LeadFormDialog } from "../components/LeadFormDialog";
 import { StickyCTA } from "../components/StickyCTA";
 import { track } from "../lib/api";
@@ -238,6 +238,15 @@ export default function LandingPage() {
               <Phone className="h-4 w-4" /> +91 70016 60016
             </a>
           </FadeUp>
+          <FadeUp delay={0.24} className="mt-6">
+            <Link
+              data-testid="emi-tool-link"
+              to="/emi"
+              className="inline-flex items-center gap-2 text-sm font-semibold text-brass-light underline underline-offset-4 transition-colors hover:text-ivory"
+            >
+              Check your EMI &amp; loan eligibility →
+            </Link>
+          </FadeUp>
           <div className="mt-12 flex flex-wrap gap-x-10 gap-y-3 border-t border-ivory/15 pt-6 text-xs text-ivory/60">
             <span className="flex items-center gap-2"><Building2 className="h-3.5 w-3.5 text-brass" /> 14+ years of experience</span>
             <span className="flex items-center gap-2"><ShieldCheck className="h-3.5 w-3.5 text-brass" /> 500+ homes delivered</span>
@@ -245,8 +254,6 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
-
-      <EmiCalculator />
 
       {/* Chapter 03 — Open living */}
       <Chapter num="03" title="70% Open to the Sky">
