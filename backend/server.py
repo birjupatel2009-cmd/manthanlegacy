@@ -125,6 +125,8 @@ BUDGET_MAP = {
     "₹50 Lakh+": ("5000000", "15000000"),
 }
 
+IST = timezone(timedelta(hours=5, minutes=30))
+
 
 async def push_to_daebuild(lead: "Lead") -> bool:
     if not DAEBUILD_URL or not DAEBUILD_KEY:
@@ -147,7 +149,7 @@ async def push_to_daebuild(lead: "Lead") -> bool:
             {"column_name": "Phone", "string_value": f"+91{lead.phone}", "column_id": "PHONE_NUMBER"},
             {"column_name": "User Email", "string_value": "", "column_id": "email"},
             {"column_name": "City", "string_value": "Ahmedabad", "column_id": "city"},
-            {"column_name": "date", "string_value": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S"), "column_id": "lead_date"},
+            {"column_name": "date", "string_value": datetime.now(IST).strftime("%Y-%m-%d %H:%M:%S"), "column_id": "lead_date"},
             {"column_name": "Preference Name", "string_value": lead.unit_type, "column_id": "looking_for"},
             {"column_name": "Source", "string_value": "Website", "column_id": "source"},
             {"column_name": "Sub Source", "string_value": "Manthan Legacy Landing Page", "column_id": "sub_source"},
@@ -157,6 +159,7 @@ async def push_to_daebuild(lead: "Lead") -> bool:
             {"column_name": "Remarks", "string_value": remarks, "column_id": "remarks"},
         ],
     }
+    logger.info("DaeBuild push for lead %s, lead_date (IST): %s", lead.id, payload["user_column_data"][5]["string_value"])
     try:
         async with httpx.AsyncClient(timeout=15) as http:
             resp = await http.post(DAEBUILD_URL, json=payload)
