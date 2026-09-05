@@ -26,6 +26,9 @@ Build a fast-loading, mobile-first, responsive real estate project landing page 
 - Backend: OTP send/verify (incl. wrong-code error), lead create (requires verified phone), leads list, track, brochure 200 (~6MB).
 - E2E via screenshots: hero, dialog steps, full funnel to /thank-you, mobile sticky CTA (390px).
 
+## Updates (2026-09-05)
+- EMI calculator section ("Know your EMI in seconds") after the payment plan chapter: loan amount slider (₹5L–₹1.5Cr), interest slider (7–12%), tenure chips (10–30 yrs); live monthly EMI + total interest/payment; "Discuss on WhatsApp" prefilled with the calculation; tracks whatsapp_click placement=emi_tool.
+
 ## Backlog
 - P0: Real SMS OTP (Twilio/MSG91 — needs user API keys).
 - P1: Lead email notification via managed Resend; admin dashboard for leads/events (GET /api/leads exists, no auth).

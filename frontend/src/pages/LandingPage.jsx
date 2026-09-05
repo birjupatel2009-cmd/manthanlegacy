@@ -7,6 +7,7 @@ import {
 } from "lucide-react";
 import { RevealLine, FadeUp } from "../components/reveal";
 import { Marquee } from "../components/Marquee";
+import { EmiCalculator } from "../components/EmiCalculator";
 import { LeadFormDialog } from "../components/LeadFormDialog";
 import { StickyCTA } from "../components/StickyCTA";
 import { track } from "../lib/api";
@@ -244,6 +245,8 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
+
+      <EmiCalculator />
 
       {/* Chapter 03 — Open living */}
       <Chapter num="03" title="70% Open to the Sky">

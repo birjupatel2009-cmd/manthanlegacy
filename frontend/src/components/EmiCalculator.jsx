@@ -1,0 +1,146 @@
+import { useMemo, useState } from "react";
+import { MessageCircle } from "lucide-react";
+import { FadeUp } from "./reveal";
+import { track } from "../lib/api";
+
+const TENURES = [10, 15, 20, 25, 30];
+
+const fmt = (n) =>
+  n >= 10000000
+    ? `₹${(n / 10000000).toFixed(2)} Cr`
+    : n >= 100000
+      ? `₹${(n / 100000).toFixed(2)} L`
+      : `₹${Math.round(n).toLocaleString("en-IN")}`;
+
+export const EmiCalculator = () => {
+  const [amount, setAmount] = useState(3700000);
+  const [rate, setRate] = useState(8.5);
+  const [years, setYears] = useState(20);
+
+  const { emi, totalInterest, total } = useMemo(() => {
+    const r = rate / 1200;
+    const n = years * 12;
+    const pow = Math.pow(1 + r, n);
+    const e = (amount * r * pow) / (pow - 1);
+    return { emi: e, totalInterest: e * n - amount, total: e * n };
+  }, [amount, rate, years]);
+
+  return (
+    <section data-testid="emi-section" className="border-t border-maroon/10 bg-ivory">
+      <div className="mx-auto max-w-6xl px-5 py-16 md:px-10 md:py-24">
+        <FadeUp>
+          <p className="mb-3 flex items-center gap-3 text-xs font-bold uppercase tracking-[0.3em] text-brass-dark">
+            <span className="inline-block h-px w-10 bg-brass" /> Plan Your Purchase
+          </p>
+          <h2 className="font-display text-4xl tracking-tight text-maroon sm:text-5xl">
+            Know your EMI <span className="italic text-brass-dark">in seconds.</span>
+          </h2>
+        </FadeUp>
+
+        <div className="mt-10 grid gap-10 md:grid-cols-2 md:gap-16">
+          <FadeUp delay={0.1} className="space-y-8">
+            <div>
+              <div className="mb-2 flex items-baseline justify-between">
+                <label htmlFor="emi-amount" className="text-xs font-bold uppercase tracking-[0.18em] text-ink/60">
+                  Loan Amount
+                </label>
+                <span data-testid="emi-amount-value" className="font-display text-xl text-maroon">{fmt(amount)}</span>
+              </div>
+              <input
+                id="emi-amount"
+                data-testid="emi-amount-slider"
+                type="range"
+                min={500000}
+                max={15000000}
+                step={100000}
+                value={amount}
+                onChange={(e) => setAmount(Number(e.target.value))}
+                className="w-full accent-maroon"
+              />
+              <div className="mt-1 flex justify-between text-[10px] uppercase tracking-wider text-ink/40">
+                <span>₹5 L</span><span>₹1.5 Cr</span>
+              </div>
+            </div>
+
+            <div>
+              <div className="mb-2 flex items-baseline justify-between">
+                <label htmlFor="emi-rate" className="text-xs font-bold uppercase tracking-[0.18em] text-ink/60">
+                  Interest Rate
+                </label>
+                <span data-testid="emi-rate-value" className="font-display text-xl text-maroon">{rate.toFixed(1)}% p.a.</span>
+              </div>
+              <input
+                id="emi-rate"
+                data-testid="emi-rate-slider"
+                type="range"
+                min={7}
+                max={12}
+                step={0.05}
+                value={rate}
+                onChange={(e) => setRate(Number(e.target.value))}
+                className="w-full accent-maroon"
+              />
+              <div className="mt-1 flex justify-between text-[10px] uppercase tracking-wider text-ink/40">
+                <span>7%</span><span>12%</span>
+              </div>
+            </div>
+
+            <div>
+              <p className="mb-2 text-xs font-bold uppercase tracking-[0.18em] text-ink/60">Tenure</p>
+              <div className="flex flex-wrap gap-2">
+                {TENURES.map((y) => (
+                  <button
+                    key={y}
+                    data-testid={`emi-tenure-${y}`}
+                    onClick={() => setYears(y)}
+                    className={`border px-4 py-2 text-sm transition-colors ${
+                      years === y
+                        ? "border-maroon bg-maroon text-ivory"
+                        : "border-maroon/25 bg-ivory text-ink hover:border-maroon"
+                    }`}
+                  >
+                    {y} yrs
+                  </button>
+                ))}
+              </div>
+            </div>
+          </FadeUp>
+
+          <FadeUp delay={0.15}>
+            <div className="flex h-full flex-col justify-between border border-brass/40 bg-maroon-deep p-7 md:p-9">
+              <div>
+                <p className="text-[11px] font-bold uppercase tracking-[0.25em] text-brass-light">Your Monthly EMI</p>
+                <p data-testid="emi-result" className="mt-3 font-display text-5xl italic tracking-tight text-ivory md:text-6xl">
+                  ₹{Math.round(emi).toLocaleString("en-IN")}
+                </p>
+                <div className="mt-6 space-y-2.5 border-t border-ivory/15 pt-5 text-sm">
+                  <div className="flex justify-between text-ivory/75">
+                    <span>Total interest</span>
+                    <span data-testid="emi-total-interest" className="font-semibold text-ivory">{fmt(totalInterest)}</span>
+                  </div>
+                  <div className="flex justify-between text-ivory/75">
+                    <span>Total payment</span>
+                    <span data-testid="emi-total-payment" className="font-semibold text-ivory">{fmt(total)}</span>
+                  </div>
+                </div>
+                <p className="mt-5 text-xs leading-relaxed text-ivory/55">
+                  Indicative only. Banks typically approve EMIs up to 40–50% of your monthly income.
+                </p>
+              </div>
+              <a
+                data-testid="emi-whatsapp-btn"
+                href={`https://wa.me/917001660016?text=${encodeURIComponent(`Hi, I checked the EMI calculator for a ${fmt(amount)} loan over ${years} years (EMI ≈ ₹${Math.round(emi).toLocaleString("en-IN")}). I'd like to discuss home loan options for Manthan Legacy.`)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => track("whatsapp_click", { placement: "emi_tool" })}
+                className="mt-7 flex items-center justify-center gap-2.5 bg-brass px-6 py-3.5 text-xs font-bold uppercase tracking-[0.18em] text-maroon-deep transition-colors hover:bg-brass-light"
+              >
+                <MessageCircle className="h-4 w-4" /> Discuss on WhatsApp
+              </a>
+            </div>
+          </FadeUp>
+        </div>
+      </div>
+    </section>
+  );
+};
