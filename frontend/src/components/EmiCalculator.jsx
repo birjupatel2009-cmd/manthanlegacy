@@ -27,14 +27,19 @@ export const EmiCalculator = () => {
   const [years, setYears] = useState(25);
   const [income, setIncome] = useState(100000);
 
-  const { emi, totalInterest, total, eligible } = useMemo(() => {
+  const { emi, eligible, yearly, tenPct } = useMemo(() => {
     const r = rate / 1200;
     const n = years * 12;
     const pow = Math.pow(1 + r, n);
     const e = (amount * r * pow) / (pow - 1);
     const maxEmi = income * 0.6;
     const elig = (maxEmi * (pow - 1)) / (r * pow);
-    return { emi: e, totalInterest: e * n - amount, total: e * n, eligible: elig };
+    const accel = (mult) => {
+      const E = e * mult;
+      const m = Math.log(E / (E - amount * r)) / Math.log(1 + r);
+      return { years: (m / 12).toFixed(1), saved: e * n - E * m };
+    };
+    return { emi: e, eligible: elig, yearly: accel(13 / 12), tenPct: accel(1.1) };
   }, [amount, rate, years, income]);
 
   return (
@@ -141,14 +146,19 @@ export const EmiCalculator = () => {
                   <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-brass-light">Loan you may be eligible for</p>
                   <p data-testid="emi-eligible-amount" className="mt-1 font-display text-2xl italic text-ivory">{fmt(eligible)}</p>
                 </div>
-                <div className="mt-5 space-y-2.5 border-t border-ivory/15 pt-5 text-sm">
-                  <div className="flex justify-between text-ivory/75">
-                    <span>Total interest</span>
-                    <span data-testid="emi-total-interest" className="font-semibold text-ivory">{fmt(totalInterest)}</span>
+                <div className="mt-5 space-y-3 border-t border-ivory/15 pt-5">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-brass-light">Smart ways to finish early</p>
+                  <div data-testid="emi-tip-extra-yearly" className="border border-ivory/15 bg-ivory/5 px-4 py-3">
+                    <p className="text-sm font-semibold text-ivory">Pay 1 extra EMI every year</p>
+                    <p data-testid="emi-tip-extra-yearly-result" className="mt-0.5 text-xs text-ivory/70">
+                      Loan done in ~{yearly.years} yrs · saves {fmt(yearly.saved)} interest
+                    </p>
                   </div>
-                  <div className="flex justify-between text-ivory/75">
-                    <span>Total payment</span>
-                    <span data-testid="emi-total-payment" className="font-semibold text-ivory">{fmt(total)}</span>
+                  <div data-testid="emi-tip-ten-percent" className="border border-ivory/15 bg-ivory/5 px-4 py-3">
+                    <p className="text-sm font-semibold text-ivory">Add just 10% to every EMI</p>
+                    <p data-testid="emi-tip-ten-percent-result" className="mt-0.5 text-xs text-ivory/70">
+                      Loan done in ~{tenPct.years} yrs · saves {fmt(tenPct.saved)} interest
+                    </p>
                   </div>
                 </div>
                 <p className="mt-5 text-xs leading-relaxed text-ivory/55">
