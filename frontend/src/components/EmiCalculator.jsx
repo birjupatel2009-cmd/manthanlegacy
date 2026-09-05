@@ -5,6 +5,15 @@ import { track } from "../lib/api";
 
 const TENURES = [10, 15, 20, 25, 30];
 
+const BANKS = [
+  { name: "SBI", color: "#22409A" },
+  { name: "HDFC Bank", color: "#004C8F" },
+  { name: "Axis Bank", color: "#97144D" },
+  { name: "ICICI Bank", color: "#F58220" },
+  { name: "IDFC FIRST", color: "#9E1B32" },
+  { name: "& more", color: "#4A1523" },
+];
+
 const fmt = (n) =>
   n >= 10000000
     ? `₹${(n / 10000000).toFixed(2)} Cr`
@@ -14,8 +23,8 @@ const fmt = (n) =>
 
 export const EmiCalculator = () => {
   const [amount, setAmount] = useState(3700000);
-  const [rate, setRate] = useState(8.5);
-  const [years, setYears] = useState(20);
+  const [rate, setRate] = useState(7.2);
+  const [years, setYears] = useState(25);
   const [income, setIncome] = useState(100000);
 
   const { emi, totalInterest, total, eligible } = useMemo(() => {
@@ -158,6 +167,24 @@ export const EmiCalculator = () => {
               </a>
             </div>
           </FadeUp>
+
+      <FadeUp delay={0.2} className="mt-10 md:col-span-2">
+        <div data-testid="emi-bank-partners" className="border-t border-maroon/10 pt-6 text-center">
+          <p className="text-[11px] font-bold uppercase tracking-[0.25em] text-ink/50">Banking Partners</p>
+          <div className="mt-4 flex flex-wrap items-center justify-center gap-2.5">
+            {BANKS.map((b) => (
+              <span
+                key={b.name}
+                data-testid={`emi-bank-${b.name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`}
+                className="border border-maroon/15 bg-ivory px-4 py-2 text-sm font-bold tracking-wide"
+                style={{ color: b.color }}
+              >
+                {b.name}
+              </span>
+            ))}
+          </div>
+        </div>
+      </FadeUp>
     </div>
   );
 };
