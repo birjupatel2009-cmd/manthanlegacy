@@ -20,6 +20,7 @@ Build a fast-loading, mobile-first, responsive real estate project landing page 
 - Sticky mobile CTA bar (call / WhatsApp / download), one-tap actions.
 - Event tracking: page_view, cta_click, form_start, otp_sent, otp_verified, otp_failed, lead_submitted, brochure_download, call_click, whatsapp_click.
 - Microsoft Clarity live (2026-09-04): official snippet in public/index.html <head>, project ID yd2he1h3wm. Heatmaps + session recordings; SPA route changes tracked automatically. Form inputs masked by default. Funnel tagging via track() in src/lib/api.js: every event fires clarity("event", name); funnel stage tags (funnel=form_started/otp_verified, converted=true on lead_submitted); placement/page/source as session tags. PII never sent.
+- Google Ads tag live (2026-09-10): gtag.js AW-18405979837 in public/index.html <head> (user-provided snippet, verbatim). Page views + remarketing beacons verified. Conversion event for lead_submitted NOT yet wired (needs conversion label from Google Ads).
 - Brochure served from backend at /api/brochure (original uploaded PDF).
 
 ## Verified
