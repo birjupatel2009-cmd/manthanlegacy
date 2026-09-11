@@ -30,6 +30,9 @@ Build a fast-loading, mobile-first, responsive real estate project landing page 
 ## Updates (2026-09-05)
 - EMI & eligibility tool moved to dedicated mobile-first page /emi (EmiToolPage: sticky header with back link + call button, no sign-up). Landing page payment chapter links to it ("Check your EMI & loan eligibility"). Eligibility at 60% of monthly income (note mentions up to 65% with strong credit). Inputs: loan amount ₹5L–₹1.5Cr, rate 7–12%, income ₹20K–₹5L, tenure 10–30y. "Discuss on WhatsApp" prefilled; page_view tracked.
 
+## Updates (2026-09-11)
+- UX pass for mobile drop-off: value-proposition strip after marquee ("Why Manthan Legacy" — 70% open / ₹4L booking / verified builder cards + social proof line + CTA); lead form now auto-sends the WhatsApp OTP the moment name+phone+all 4 answers are complete (no SEND OTP tap needed; button remains as fallback), step indicator (Step 1 of 2 / Step 2 of 2), autofocus on name. Sticky mobile CTA bar already present.
+
 ## Backlog
 - P0: Real SMS OTP (Twilio/MSG91 — needs user API keys).
 - P1: Lead email notification via managed Resend; admin dashboard for leads/events (GET /api/leads exists, no auth).

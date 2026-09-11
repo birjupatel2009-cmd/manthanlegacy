@@ -43,6 +43,7 @@ export const LeadFormDialog = ({ open, onOpenChange }) => {
   const [loading, setLoading] = useState(false);
   const [cooldown, setCooldown] = useState(0);
   const startedRef = useRef(false);
+  const autoSentRef = useRef(false);
 
   useEffect(() => {
     if (open && !startedRef.current) {
@@ -51,6 +52,7 @@ export const LeadFormDialog = ({ open, onOpenChange }) => {
     }
     if (!open) {
       startedRef.current = false;
+      autoSentRef.current = false;
       setStep("form");
       setError("");
       setOtp("");
@@ -147,6 +149,14 @@ export const LeadFormDialog = ({ open, onOpenChange }) => {
     }
   };
 
+  useEffect(() => {
+    if (step !== "form" || loading || autoSentRef.current) return undefined;
+    if (!allAnswered || name.trim().length < 2 || !phoneValid) return undefined;
+    autoSentRef.current = true;
+    const t = setTimeout(() => sendOtp(), 700);
+    return () => clearTimeout(t);
+  }, [answers, name, phone, step, allAnswered, phoneValid, loading]);
+
   const inputCls =
     "w-full border border-maroon/25 bg-ivory px-4 py-3 text-base text-ink placeholder:text-ink/40 focus:border-maroon focus:outline-none transition-colors";
 
@@ -157,6 +167,9 @@ export const LeadFormDialog = ({ open, onOpenChange }) => {
         className="max-w-md border-maroon/20 bg-ivory p-6 sm:p-8 max-h-[92vh] overflow-y-auto"
       >
         <DialogHeader>
+          <p data-testid="form-step-indicator" className="mb-1 text-[10px] font-bold uppercase tracking-[0.25em] text-brass-dark">
+            {step === "form" ? "Step 1 of 2 · Your details" : "Step 2 of 2 · Verify OTP"}
+          </p>
           <DialogTitle className="font-display text-2xl text-maroon">
             {step === "form" && "Download Brochure"}
             {step === "otp" && "Verify Your Number"}
@@ -181,6 +194,7 @@ export const LeadFormDialog = ({ open, onOpenChange }) => {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 autoComplete="name"
+                autoFocus
               />
             </div>
             <div>
@@ -259,6 +273,9 @@ export const LeadFormDialog = ({ open, onOpenChange }) => {
                 {loading && <Loader2 className="h-4 w-4 animate-spin" />}
                 Send OTP
               </button>
+              <p className="mt-2 pb-1 text-center text-[11px] text-ink/45">
+                Fill everything — your OTP sends automatically on WhatsApp
+              </p>
             </div>
           </div>
         )}

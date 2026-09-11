@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import {
   ArrowDown, Building2, Trees, ShieldCheck, TrainFront, Hospital,
-  GraduationCap, ShoppingBasket, Route, Phone, Download, MapPin,
+  GraduationCap, ShoppingBasket, Route, Phone, Download, MapPin, Wallet,
   Facebook, Instagram,
 } from "lucide-react";
 import { RevealLine, FadeUp } from "../components/reveal";
@@ -159,6 +159,46 @@ export default function LandingPage() {
       </section>
 
       <Marquee />
+
+      {/* Value proposition strip */}
+      <section data-testid="value-prop-section" className="bg-ivory">
+        <div className="mx-auto max-w-6xl px-5 py-14 md:px-10 md:py-20">
+          <FadeUp>
+            <p className="mb-3 flex items-center gap-3 text-xs font-bold uppercase tracking-[0.3em] text-brass-dark">
+              <span className="inline-block h-px w-10 bg-brass" /> Why Manthan Legacy
+            </p>
+            <h2 className="font-display text-4xl tracking-tight text-maroon sm:text-5xl">
+              Built for families. <span className="italic text-brass-dark">Priced for first homes.</span>
+            </h2>
+          </FadeUp>
+          <div className="mt-9 grid gap-4 sm:grid-cols-3">
+            {[
+              { icon: Trees, title: "70% open to the sky", text: "Gardens, courtyards and play lawns — not just towers and concrete." },
+              { icon: Wallet, title: "Own it with ₹4 Lakh", text: "Book at 10% or ₹4 Lakh today. Pay the balance only on possession." },
+              { icon: ShieldCheck, title: "A builder you can verify", text: "14+ years, 500+ homes delivered, every project RERA-registered." },
+            ].map(({ icon: Icon, title, text }, i) => (
+              <FadeUp key={title} delay={0.08 + i * 0.07}>
+                <article data-testid={`value-card-${i + 1}`} className="h-full border border-maroon/15 bg-card p-6">
+                  <Icon className="h-6 w-6 text-brass-dark" strokeWidth={1.5} />
+                  <h3 className="mt-4 font-display text-xl text-maroon">{title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-ink/65">{text}</p>
+                </article>
+              </FadeUp>
+            ))}
+          </div>
+          <FadeUp delay={0.25} className="mt-9 flex flex-col gap-4 sm:flex-row sm:items-center">
+            <button
+              data-testid="download-brochure-btn-valueprop"
+              onClick={() => openForm("value_prop")}
+              className="group flex items-center justify-center gap-3 bg-maroon px-8 py-4 text-sm font-bold uppercase tracking-[0.2em] text-ivory transition-colors hover:bg-maroon-deep"
+            >
+              <Download className="h-4 w-4 transition-transform group-hover:translate-y-0.5" />
+              Download Brochure
+            </button>
+            <p className="text-xs uppercase tracking-[0.16em] text-ink/50">Trusted by 500+ families across Ahmedabad</p>
+          </FadeUp>
+        </div>
+      </section>
 
       {/* Chapter 01 — Residences */}
       <Chapter num="01" title="Residences & Retail" className="bg-parchment/50">
