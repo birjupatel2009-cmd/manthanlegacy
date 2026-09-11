@@ -164,7 +164,9 @@ export const LeadFormDialog = ({ open, onOpenChange }) => {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
         data-testid="lead-form-dialog"
-        className="max-w-md border-maroon/20 bg-ivory p-6 sm:p-8 max-h-[92vh] overflow-y-auto"
+        data-lenis-prevent
+        className="max-w-md border-maroon/20 bg-ivory p-6 sm:p-8 max-h-[92vh] overflow-y-auto overscroll-contain"
+        style={{ touchAction: "pan-y" }}
       >
         <DialogHeader>
           <p data-testid="form-step-indicator" className="mb-1 text-[10px] font-bold uppercase tracking-[0.25em] text-brass-dark">
@@ -196,6 +198,11 @@ export const LeadFormDialog = ({ open, onOpenChange }) => {
                 autoComplete="name"
                 autoFocus
               />
+              {nameBad && (
+                <p data-testid="name-error" className="mt-1.5 text-xs font-medium text-destructive">
+                  Please enter your full name
+                </p>
+              )}
             </div>
             <div>
               <label htmlFor="lead-phone" className="mb-1 block text-xs font-semibold uppercase tracking-wider text-maroon">
@@ -217,9 +224,15 @@ export const LeadFormDialog = ({ open, onOpenChange }) => {
                   autoComplete="tel-national"
                 />
               </div>
-              <p className="mt-1.5 flex items-center gap-1 text-xs text-ink/50">
-                <ShieldCheck className="h-3 w-3 text-brass-dark" /> OTP verification required
-              </p>
+              {phoneBad ? (
+                <p data-testid="phone-error" className="mt-1.5 text-xs font-medium text-destructive">
+                  Enter a valid 10-digit mobile number
+                </p>
+              ) : (
+                <p className="mt-1.5 flex items-center gap-1 text-xs text-ink/50">
+                  <ShieldCheck className="h-3 w-3 text-brass-dark" /> OTP verification required
+                </p>
+              )}
             </div>
             <div className="space-y-5 border-t border-maroon/10 pt-5">
               {QUESTIONS.map((q, qi) => {
