@@ -59,6 +59,7 @@ class LeadCreate(BaseModel):
     unit_type: str
     budget: str
     timeline: str
+    locality: str = Field(min_length=2, max_length=80)
 
 
 class Lead(BaseDocument):
@@ -68,6 +69,7 @@ class Lead(BaseDocument):
     unit_type: str
     budget: str
     timeline: str
+    locality: str = ""
     source: str = "landing_page"
     crm_synced: bool = False
     created_at: str
@@ -132,6 +134,7 @@ async def push_to_daebuild(lead: "Lead") -> bool:
     if not DAEBUILD_URL or not DAEBUILD_KEY:
         return False
     remarks = (
+        f"Current area: {lead.locality} | "
         f"Interested in Vatva: {lead.interested_vatva} | "
         f"Looking for: {lead.unit_type} | "
         f"Budget: {lead.budget} | "
@@ -156,6 +159,7 @@ async def push_to_daebuild(lead: "Lead") -> bool:
             {"column_name": "Budget Range", "string_value": f"{min_budget}-{max_budget}" if min_budget else lead.budget, "column_id": "combine_budget"},
             {"column_name": "Minimum Budget", "string_value": min_budget, "column_id": "min_budget"},
             {"column_name": "Maximum Budget", "string_value": max_budget, "column_id": "max_budget"},
+            {"column_name": "Preferred Locality", "string_value": lead.locality, "column_id": "locality"},
             {"column_name": "Remarks", "string_value": remarks, "column_id": "remarks"},
         ],
     }
@@ -249,6 +253,7 @@ async def create_lead(body: LeadCreate):
         unit_type=body.unit_type,
         budget=body.budget,
         timeline=body.timeline,
+        locality=body.locality.strip(),
         created_at=now_iso(),
     )
     result = await db.leads.insert_one(lead.to_mongo())

@@ -27,6 +27,8 @@ const QUESTIONS = [
   },
 ];
 
+const AREAS = ["Vatva", "Ghodasar", "Isanpur", "Narol", "Lambha", "CTM", "Jashodanagar", "Other"];
+
 const RESEND_SECONDS = 30;
 
 export const LeadFormDialog = ({ open, onOpenChange }) => {
@@ -84,12 +86,13 @@ export const LeadFormDialog = ({ open, onOpenChange }) => {
     }
     if (!allAnswered) {
       const firstMissing = QUESTIONS.findIndex((q) => !answers[q.key]);
+      const targetTestId = firstMissing >= 0 ? `question-${firstMissing + 1}` : "question-5";
       setTimeout(() => {
         document
-          .querySelector(`[data-testid="question-${firstMissing + 1}"]`)
+          .querySelector(`[data-testid="${targetTestId}"]`)
           ?.scrollIntoView({ behavior: "smooth", block: "center" });
       }, 60);
-      return setError("Please answer all 4 questions to get the brochure");
+      return setError("Please answer all 5 questions to get the brochure");
     }
     setLoading(true);
     try {
@@ -122,7 +125,11 @@ export const LeadFormDialog = ({ open, onOpenChange }) => {
     }
   };
 
-  const allAnswered = QUESTIONS.every((q) => answers[q.key]);
+  const localityValid =
+    Boolean(answers.locality) &&
+    (answers.locality !== "Other" || (answers.locality_other || "").trim().length >= 2);
+  const q5Missing = submitAttempted && !localityValid;
+  const allAnswered = QUESTIONS.every((q) => answers[q.key]) && localityValid;
 
   const submitLead = async () => {
     if (!allAnswered) return;
@@ -136,6 +143,7 @@ export const LeadFormDialog = ({ open, onOpenChange }) => {
         unit_type: answers.unit_type,
         budget: answers.budget,
         timeline: answers.timeline,
+        locality: answers.locality === "Other" ? answers.locality_other.trim() : answers.locality,
       });
       track("lead_submitted");
       sessionStorage.removeItem("brochure_dl");
@@ -177,7 +185,7 @@ export const LeadFormDialog = ({ open, onOpenChange }) => {
             {step === "otp" && "Verify Your Number"}
           </DialogTitle>
           <p className="text-sm text-ink/60">
-            {step === "form" && "Answer 4 quick questions, verify your number, and get the brochure instantly."}
+            {step === "form" && "Answer 5 quick questions, verify your number, and get the brochure instantly."}
             {step === "otp" && (channel === "whatsapp" ? `OTP sent on WhatsApp to +91 ${phone}` : `OTP sent to +91 ${phone}`)}
           </p>
         </DialogHeader>
@@ -274,6 +282,52 @@ export const LeadFormDialog = ({ open, onOpenChange }) => {
                 </div>
                 );
               })}
+
+              <div
+                data-testid="question-5"
+                className={`border-l-2 pl-3 transition-colors ${q5Missing ? "border-destructive" : "border-transparent"}`}
+              >
+                <p className={`mb-2 text-sm font-semibold ${q5Missing ? "text-destructive" : "text-ink"}`}>
+                  <span className="mr-1.5 font-display italic text-brass-dark">5.</span>
+                  What area do you currently live in?
+                  {q5Missing && (
+                    <span data-testid="question-5-required" className="ml-2 text-[10px] font-bold uppercase tracking-widest text-destructive">
+                      Required
+                    </span>
+                  )}
+                </p>
+                <select
+                  data-testid="q5-locality-select"
+                  value={answers.locality || ""}
+                  onChange={(e) =>
+                    setAnswers((a) => ({
+                      ...a,
+                      locality: e.target.value,
+                      ...(e.target.value !== "Other" ? { locality_other: "" } : {}),
+                    }))
+                  }
+                  className={`w-full border bg-ivory px-4 py-3 text-base focus:outline-none transition-colors ${
+                    q5Missing ? "border-destructive" : "border-maroon/25 focus:border-maroon"
+                  } ${answers.locality ? "text-ink" : "text-ink/40"}`}
+                >
+                  <option value="" disabled>Select your area</option>
+                  {AREAS.map((area) => (
+                    <option key={area} value={area}>
+                      {area}
+                    </option>
+                  ))}
+                </select>
+                {answers.locality === "Other" && (
+                  <input
+                    data-testid="q5-locality-other-input"
+                    className={`${inputCls} mt-2`}
+                    placeholder="Type your area"
+                    maxLength={60}
+                    value={answers.locality_other || ""}
+                    onChange={(e) => setAnswers((a) => ({ ...a, locality_other: e.target.value }))}
+                  />
+                )}
+              </div>
             </div>
             <div data-testid="send-otp-sticky-bar" className="sticky bottom-0 -mx-6 border-t border-maroon/10 bg-ivory px-6 pb-1 pt-3 sm:-mx-8 sm:px-8">
               {error && <p data-testid="lead-form-error" className="mb-2 text-sm font-medium text-destructive">{error}</p>}

@@ -33,6 +33,9 @@ Build a fast-loading, mobile-first, responsive real estate project landing page 
 ## Updates (2026-09-11)
 - UX pass for mobile drop-off: value-proposition strip after marquee ("Why Manthan Legacy" — 70% open / ₹4L booking / verified builder cards + social proof line + CTA); lead form now auto-sends the WhatsApp OTP the moment name+phone+all 4 answers are complete (no SEND OTP tap needed; button remains as fallback), step indicator (Step 1 of 2 / Step 2 of 2), autofocus on name. Sticky mobile CTA bar already present.
 
+## Updates (2026-09-11, later)
+- Q5 added to lead form: mandatory dropdown "What area do you currently live in?" (Vatva, Ghodasar, Isanpur, Narol, Lambha, CTM, Jashodanagar, Other → free text). Stored as lead.locality, sent to DaeBuild column_id "locality" (Preferred Locality) + included in remarks. Lead.locality defaults "" for pre-existing docs. Form scroll fix: data-lenis-prevent on DialogContent (Lenis was swallowing wheel/touch inside modal); inline red errors under name/phone fields.
+
 ## Backlog
 - P0: Real SMS OTP (Twilio/MSG91 — needs user API keys).
 - P1: Lead email notification via managed Resend; admin dashboard for leads/events (GET /api/leads exists, no auth).
